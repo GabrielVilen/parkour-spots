@@ -1,0 +1,102 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context="se.parkourspots.SpotFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:onClick="addSpot"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="New spot"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/spotName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Spot name"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Descrption"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/difficulty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Difficulty"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/ground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ground material"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/goodFor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Good for" />
+
+        <EditText
+            android:id="@+id/size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Size"
+            android:singleLine="true" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/spot_test"
+            android:baselineAlignBottom="false" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/addNewSpot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="#ff73ff00"
+                android:text="Add spot" />
+
+            <Button
+                android:id="@+id/cancelNewSpot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="#ffff4d3f"
+                android:text="Cancel" />
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>

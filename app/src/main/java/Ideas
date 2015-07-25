@@ -1,0 +1,29 @@
+App name: Parkour Spots
+
+----------------------------------------------------------------------------------------------------
+Basic idea:
+Map where users can store parkour spots and see other stored spots.
+
+----------------------------------------------------------------------------------------------------
+Spots:
+Contains: Name, description, photo.
+Could also contain: Difficult level (1-5), Good for, Number of people, Ground material, Video
+
+----------------------------------------------------------------------------------------------------
+Action bar:
+*Search spot name
+*Filer by (difficulty, good for, etc.)
+
+----------------------------------------------------------------------------------------------------
+User:
+*User can login (using facebook?)
+*Edit profile, photo, skills etc (?)
+
+----------------------------------------------------------------------------------------------------
+Code:
+*Google Maps API using GPS
+*MySQL server - need a raspberry pi!
+*Classes for Map, Marker, Spot, User,
+*User takes photo with Camera
+
+----------------------------------------------------------------------------------------------------
