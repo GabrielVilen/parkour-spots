@@ -1,9 +1,9 @@
 package se.parkourspots;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.location.Location;
-import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener, SpotFragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private SpotFragment fragment;
     private FragmentManager fragmentManager;
     private Marker marker;
 
@@ -100,26 +99,46 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapLon
             marker = mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
             marker.setDraggable(true);
 
-            fragment = SpotFragment.newInstance(latLng);
+            SpotFragment fragment = SpotFragment.newInstance(latLng);
+            fragment.onAttach(this);
+
             fragmentManager.beginTransaction().add(R.id.mapLayout, fragment).commit();
 
             setMapWeight(2);
         }
-        fragment.setMarker(marker);
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
         if (marker != null && marker.isDraggable()) {
             marker.setPosition(latLng);
-            fragment.setMarker(marker);
         }
     }
 
-    private void removeFragment() {
+    @Override
+    public Marker getMarker() {
+        return marker;
+    }
+
+    @Override
+    public void cancelNewSpot(Fragment fragment) {
+        marker.remove();
+        marker = null;
+
+        removeFragment(fragment);
+    }
+
+    @Override
+    public void removeFragment(Fragment fragment) {
         if (fragment != null && fragment.isAdded()) {
-            setMapWeight(0);
             fragmentManager.beginTransaction().remove(fragment).commit();
+
+            if (fragment instanceof SpotFragment) {
+                SpotFragment spotFragment = (SpotFragment) fragment;
+                spotFragment.onDetach();
+            }
+
+            setMapWeight(0);
             hideKeyboard();
         }
     }
@@ -132,28 +151,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapLon
         }
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        Log.d("SPOT", "onFragmentInteraction(" + uri + ")");
-
-    }
-
     private void setMapWeight(int weight) {
         LinearLayout layout = (LinearLayout) findViewById(R.id.mapLayout);
         layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, weight));
-    }
-
-    // TODO: FLYTTA FRAGMENT FUNK. TILL SPOTFRAGMENT OCH TA BORT ONCLICK FRÅN XML KNAPPARNA CANCEL OCH ADD SPOT
-    public void addNewSpot(View view) {
-        fragment.addNewSpot();
-        marker.setDraggable(false);
-        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        removeFragment();
-    }
-
-    public void cancelNewSpot(View view) {
-        marker.remove();
-        marker = null;
-        removeFragment();
     }
 }

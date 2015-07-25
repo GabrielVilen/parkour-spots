@@ -1,7 +1,6 @@
 package se.parkourspots;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -30,7 +28,6 @@ public class SpotFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private LatLng latLng;
     private Spot spot;
-    private Marker marker;
     private EditText etSpotName;
 
     /**
@@ -46,6 +43,7 @@ public class SpotFragment extends Fragment {
         Bundle args = new Bundle();
         args.putParcelable(LAT_LNG, latLng);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -54,19 +52,20 @@ public class SpotFragment extends Fragment {
     }
 
     public void addNewSpot() {
-        Log.d("SPOT", "marker = " + marker); // TODO fix marker == null
-
-        if (marker == null) {
-            throw new NullPointerException("Shit, marker is null!");
-        }
         String spotName = etSpotName.getText().toString();
 
+        if (mListener == null) {
+            throw new NullPointerException("mListner is null!");
+        }
+        Marker marker = mListener.getMarker();
+        if (marker == null) {
+            throw new NullPointerException("Marker is null!");
+        }
         marker.setTitle(spotName);
         marker.setDraggable(false);
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
         spot = new Spot(marker);
-        spot.setMarker(marker);
         spot.setName(spotName);
     }
 
@@ -91,6 +90,7 @@ public class SpotFragment extends Fragment {
                 switch (view.getId()) {
                     case (R.id.addNewSpot):
                         addNewSpot();
+                        removeFragment();
                         break;
                     case (R.id.cancelNewSpot):
                         cancelNewSpot();
@@ -105,20 +105,17 @@ public class SpotFragment extends Fragment {
     }
 
     private void cancelNewSpot() {
-        marker.remove();
-        marker = null;
+        mListener.cancelNewSpot(this);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void removeFragment() {
+        mListener.removeFragment(this);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        Log.d("SPOT", "onAttach()" + activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -130,12 +127,8 @@ public class SpotFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.d("SPOT", "onDetach()");
         mListener = null;
-    }
-
-    public void setMarker(Marker marker) {
-        Log.d("SPOT", "Added marker = " + marker);
-        this.marker = marker;
     }
 
     /**
@@ -149,8 +142,11 @@ public class SpotFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        Marker getMarker();
+
+        void cancelNewSpot(Fragment fragment);
+
+        void removeFragment(Fragment fragment);
     }
 
 }

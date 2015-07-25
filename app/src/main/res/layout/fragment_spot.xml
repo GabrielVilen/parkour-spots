@@ -28,7 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Spot name"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:text="Test" />
 
         <EditText
             android:id="@+id/description"
