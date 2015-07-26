@@ -1,19 +1,14 @@
 package se.parkourspots;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
-import android.app.ActionBar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -52,13 +47,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
         mActionBar.setDisplayUseLogoEnabled(false);
         mActionBar.setDisplayShowHomeEnabled(false);
 
-        LayoutInflater mInflater = LayoutInflater.from(this);
-
-        View mCustomView = mInflater.inflate(R.layout.action_bar_custom, null);
-
-        //mActionBar.setCustomView(mCustomView);
-        mActionBar.setCustomView(mCustomView, new Toolbar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        mActionBar.setDisplayShowCustomEnabled(true);
+        View customView = getLayoutInflater().inflate(R.layout.action_bar_custom, null);
+        mActionBar.setCustomView(customView);
+        Toolbar parent = (Toolbar) customView.getParent();
+        parent.setContentInsetsAbsolute(0, 0);
     }
 
     @Override
@@ -167,9 +159,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d("SPOT", "onCreateOptionMenu()");
-        MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.action_bar, menu);
+//        Log.d("SPOT", "onCreateOptionMenu()");
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.action_bar, menu);
 
         setUpCustomActionBar();
 

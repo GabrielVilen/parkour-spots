@@ -7,28 +7,28 @@
 
     <!-- add child components to this empty action bar !-->
 
-    <item
-        android:id="@+id/action_menu"
-        android:icon="@drawable/ic_menu"
-        android:showAsAction="always"
-        android:title="Menu" />
+    <!--<item-->
+    <!--android:id="@+id/action_menu"-->
+    <!--android:icon="@drawable/ic_menu"-->
+    <!--android:showAsAction="always"-->
+    <!--android:title="Menu" />-->
 
 
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:showAsAction="always"
-        android:title="Search" />
+    <!--<item-->
+    <!--android:id="@+id/action_search"-->
+    <!--android:icon="@drawable/ic_search"-->
+    <!--android:showAsAction="always"-->
+    <!--android:title="Search" />-->
 
-    <item
-        android:id="@+id/action_marker"
-        android:icon="@drawable/ic_map_marker"
-        android:showAsAction="ifRoom"
-        android:title="Marker" />
+    <!--<item-->
+    <!--android:id="@+id/action_marker"-->
+    <!--android:icon="@drawable/ic_map_marker"-->
+    <!--android:showAsAction="ifRoom"-->
+    <!--android:title="Marker" />-->
 
-    <item
-        android:id="@+id/action_settings"
-        android:showAsAction="never"
-        android:title="Settings" />
+    <!--<item-->
+    <!--android:id="@+id/action_settings"-->
+    <!--android:showAsAction="never"-->
+    <!--android:title="Settings" />-->
 
 </menu>
