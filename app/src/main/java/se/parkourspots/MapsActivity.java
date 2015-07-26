@@ -1,13 +1,17 @@
 package se.parkourspots;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.location.Location;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.app.ActionBar;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -23,7 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener, SpotFragment.OnFragmentInteractionListener {
+public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener, SpotFragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private FragmentManager fragmentManager;
@@ -33,7 +37,28 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapLon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         setUpMapIfNeeded();
+    }
+
+    private void setUpCustomActionBar() {
+        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+        if (mActionBar == null) {
+            throw new NullPointerException("mActionBar == null!");
+        }
+
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.setDisplayUseLogoEnabled(false);
+        mActionBar.setDisplayShowHomeEnabled(false);
+
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        View mCustomView = mInflater.inflate(R.layout.action_bar_custom, null);
+
+        //mActionBar.setCustomView(mCustomView);
+        mActionBar.setCustomView(mCustomView, new Toolbar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mActionBar.setDisplayShowCustomEnabled(true);
     }
 
     @Override
@@ -142,20 +167,13 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapLon
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d("SPOT", "onCreateOptionMenu()");
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar, menu);
+        //inflater.inflate(R.menu.action_bar, menu);
 
-        ActionBar actionBar = getActionBar();
-        try {
-            actionBar.setDisplayShowHomeEnabled(false);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        View mActionBarView = getLayoutInflater().inflate(R.layout.action_bar_maps, null);
-        actionBar.setCustomView(mActionBarView);
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        setUpCustomActionBar();
 
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
 
