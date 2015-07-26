@@ -128,7 +128,6 @@ public class SpotFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         Log.d("SPOT", "onDetach()");
-        mListener = null;
     }
 
     /**

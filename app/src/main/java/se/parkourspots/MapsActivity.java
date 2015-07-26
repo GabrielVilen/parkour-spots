@@ -7,6 +7,9 @@ import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -100,7 +103,6 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapLon
             marker.setDraggable(true);
 
             SpotFragment fragment = SpotFragment.newInstance(latLng);
-            fragment.onAttach(this);
 
             fragmentManager.beginTransaction().add(R.id.mapLayout, fragment).commit();
 
@@ -130,18 +132,32 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapLon
 
     @Override
     public void removeFragment(Fragment fragment) {
-        if (fragment != null && fragment.isAdded()) {
+        if (!fragment.isDetached()) {
             fragmentManager.beginTransaction().remove(fragment).commit();
-
-            if (fragment instanceof SpotFragment) {
-                SpotFragment spotFragment = (SpotFragment) fragment;
-                spotFragment.onDetach();
-            }
 
             setMapWeight(0);
             hideKeyboard();
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar, menu);
+
+        ActionBar actionBar = getActionBar();
+        try {
+            actionBar.setDisplayShowHomeEnabled(false);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        View mActionBarView = getLayoutInflater().inflate(R.layout.action_bar_maps, null);
+        actionBar.setCustomView(mActionBarView);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
 
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
