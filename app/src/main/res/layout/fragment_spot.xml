@@ -4,32 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context="se.parkourspots.SpotFragment">
+    android:theme="@style/Theme.AppCompat.Light.Dialog"
+    tools:context=".MapsActivity"
+    android:background="#E3F2FD">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:onClick="addSpot"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:text="New spot"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:background="@color/wallet_holo_blue_light"
+            android:textColor="#ffffffff"
+            android:elevation="2dp" />
 
         <EditText
             android:id="@+id/spotName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Spot name"
-            android:singleLine="true"
-            android:text="Test" />
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/description"
