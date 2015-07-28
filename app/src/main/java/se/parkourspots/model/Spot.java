@@ -1,7 +1,8 @@
-package se.parkourspots;
+package se.parkourspots.model;
 
 import android.graphics.Bitmap;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -16,6 +17,7 @@ public class Spot implements Serializable {
     private String description;
     private Bitmap photo;
     private Marker marker;
+    private GoogleMap.InfoWindowAdapter windowAdapter;
 
     public Spot(Marker markers) {
         this.marker = marker;
@@ -51,5 +53,9 @@ public class Spot implements Serializable {
 
     public void setMarker(Marker marker) {
         this.marker = marker;
+    }
+
+    public void setInfoWindowAdapter(GoogleMap.InfoWindowAdapter windowAdapter) {
+        this.windowAdapter = windowAdapter;
     }
 }

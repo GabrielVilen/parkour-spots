@@ -10,95 +10,120 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:clickable="true"
-        android:onClick="addSpot"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="New spot"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:background="@color/wallet_holo_blue_light"
             android:textColor="#ffffffff"
-            android:elevation="2dp" />
+            android:elevation="2dp"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/spotName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:hint="Spot name"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:hint="Descrption"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/difficulty"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:hint="Difficulty"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/ground"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:hint="Ground material"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/goodFor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Good for" />
+            android:layout_height="0dp"
+            android:hint="Good for"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/size"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:hint="Size"
-            android:singleLine="true" />
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:background="@drawable/spot_test"
-            android:baselineAlignBottom="false" />
+            android:singleLine="true"
+            android:layout_weight="1" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="250dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/photoView"
+                android:background="@android:color/background_light"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cameraButton"
+                android:background="@drawable/ic_camera_big"
+                android:elevation="6dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/addNewSpot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:background="#ff73ff00"
-                android:text="Add spot" />
+                android:text="Add spot"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:elevation="6dp" />
 
             <Button
                 android:id="@+id/cancelNewSpot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:background="#ffff4d3f"
-                android:text="Cancel" />
+                android:text="Cancel"
+                android:elevation="6dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
         </RelativeLayout>
 
     </LinearLayout>

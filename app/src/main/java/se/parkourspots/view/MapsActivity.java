@@ -1,4 +1,4 @@
-package se.parkourspots;
+package se.parkourspots.view;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +22,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import se.parkourspots.controller.MarkerHandler;
+import se.parkourspots.R;
+
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener, SpotFragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private FragmentManager fragmentManager;
-    private Marker marker;
+    private Marker currentMarker;
+    private MarkerHandler markerHandler;
+    private SpotInfoWindowAdapter windowAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (markerHandler == null) {
+            markerHandler = new MarkerHandler();
+        }
         setContentView(R.layout.activity_maps);
 
         setUpMapIfNeeded();
@@ -62,24 +71,21 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
      * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
+     * <p>
      * If it isn't installed {@link SupportMapFragment} (and
      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
      * install/update the Google Play services APK on their device.
-     * <p/>
+     * <p>
      * A user can return to this FragmentActivity after following the prompt and correctly
      * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
      * have been completely destroyed during this process (it is likely that it would only be
      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
      * method in {@link #onResume()} to guarantee that it will be called.
      */
-    private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
+    private void setUpMapIfNeeded() {   // TODO: Varna om GPS avstängd!
         if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
-            // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
             }
@@ -87,9 +93,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
     }
 
     /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
+     * <p>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
@@ -97,6 +101,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMapClickListener(this);
+
+        windowAdapter = new SpotInfoWindowAdapter(getLayoutInflater());
+        mMap.setInfoWindowAdapter(windowAdapter);
 
         fragmentManager = getFragmentManager();
         final GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
@@ -112,14 +119,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        if (marker != null && marker.isDraggable()) {
-            marker.setPosition(latLng);
+        if (currentMarker != null && currentMarker.isDraggable()) {
+            currentMarker.setPosition(latLng);
         } else {
-            marker = mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            marker.setDraggable(true);
+            currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            currentMarker.setDraggable(true);
 
             SpotFragment fragment = SpotFragment.newInstance(latLng);
-
             fragmentManager.beginTransaction().add(R.id.mapLayout, fragment).commit();
 
             setMapWeight(2);
@@ -128,20 +134,24 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if (marker != null && marker.isDraggable()) {
-            marker.setPosition(latLng);
+        if (currentMarker != null && currentMarker.isDraggable()) {
+            currentMarker.setPosition(latLng);
         }
     }
 
     @Override
-    public Marker getMarker() {
-        return marker;
+    public Marker getCurrentMarker() {
+        return currentMarker;
+    }
+
+    public MarkerHandler getMarkerHandler() {
+        return markerHandler;
     }
 
     @Override
     public void cancelNewSpot(Fragment fragment) {
-        marker.remove();
-        marker = null;
+        currentMarker.remove();
+        currentMarker = null;
 
         removeFragment(fragment);
     }
@@ -158,15 +168,15 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        Log.d("SPOT", "onCreateOptionMenu()");
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.action_bar, menu);
-
         setUpCustomActionBar();
 
         return true;
     }
 
+    @Override
+    public SpotInfoWindowAdapter getWindowAdapter() {
+        return windowAdapter;
+    }
 
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
