@@ -1,11 +1,10 @@
 package se.parkourspots.view;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -43,27 +41,25 @@ public class SpotFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private LatLng latLng;
     private Spot spot;
-    private Uri fileUri;
 
     private EditText etSpotName, etDescription;
     private ImageView photoView;
     private ImageButton cameraButton;
     private Marker marker;
-    private SpotInfoWindowAdapter windowAdapter;
+    private Bitmap photo;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param latLng Parameter 1.
+     * @param marker Parameter 1.
      * @return A new instance of fragment SpotFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static SpotFragment newInstance(LatLng latLng) {
+    public static SpotFragment newInstance(Marker marker) {
         SpotFragment fragment = new SpotFragment();
 
         Bundle args = new Bundle();
-        args.putParcelable(LAT_LNG, latLng);
+        args.putParcelable(LAT_LNG, marker.getPosition());
         fragment.setArguments(args);
 
         return fragment;
@@ -93,10 +89,11 @@ public class SpotFragment extends Fragment {
         spot = new Spot(marker);
         spot.setName(name);
         spot.setDescription(description);
-        if (windowAdapter != null)
-            spot.setInfoWindowAdapter(windowAdapter);
+        spot.setPhoto(photo);
 
         markerHandler.addMarker(marker, spot);
+
+        hideFragment();
     }
 
     @Override
@@ -123,7 +120,6 @@ public class SpotFragment extends Fragment {
                 switch (view.getId()) {
                     case (R.id.addNewSpot):
                         addNewSpot();
-                        removeFragment();
                         break;
                     case (R.id.cancelNewSpot):
                         cancelNewSpot();
@@ -151,22 +147,27 @@ public class SpotFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            photo = (Bitmap) data.getExtras().get("data");
             photoView.setImageBitmap(photo);
             cameraButton.setVisibility(View.INVISIBLE);
-
-            windowAdapter = mListener.getWindowAdapter();
-            windowAdapter.setPhoto(photo);
-            //cameraButton.setAlpha(0.5f);
         }
     }
 
-    private void cancelNewSpot() {
-        mListener.cancelNewSpot(this);
+    private void clearFields() {
+        etSpotName.setText("");
+        etDescription.setText("");
+        photoView.setImageResource(android.R.color.white);
+        cameraButton.setVisibility(View.VISIBLE);
     }
 
-    private void removeFragment() {
-        mListener.removeFragment(this);
+    private void cancelNewSpot() {
+        mListener.cancelFragment(this);
+        clearFields();
+    }
+
+    private void hideFragment() {
+        mListener.hideFragment(this);
+        clearFields();
     }
 
     @Override
@@ -182,30 +183,23 @@ public class SpotFragment extends Fragment {
         setUpHandler();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d("SPOT", "onDetach() " + this.toString());
-    }
 
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
+        void cancelFragment(Fragment fragment);
+
+        void hideFragment(Fragment fragment);
+
         Marker getCurrentMarker();
-
-        void cancelNewSpot(Fragment fragment);
-
-        void removeFragment(Fragment fragment);
-
-        SpotInfoWindowAdapter getWindowAdapter();
     }
 
 }

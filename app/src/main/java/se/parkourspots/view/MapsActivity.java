@@ -4,10 +4,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import se.parkourspots.controller.MarkerHandler;
 import se.parkourspots.R;
+import se.parkourspots.controller.MarkerHandler;
 
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener, SpotFragment.OnFragmentInteractionListener {
 
@@ -32,12 +33,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
     private Marker currentMarker;
     private MarkerHandler markerHandler;
     private SpotInfoWindowAdapter windowAdapter;
+    private SpotFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (markerHandler == null) {
-            markerHandler = new MarkerHandler();
+            markerHandler = MarkerHandler.getInstance();
         }
         setContentView(R.layout.activity_maps);
 
@@ -46,10 +48,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
 
     private void setUpCustomActionBar() {
         android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
-        if (mActionBar == null) {
-            throw new NullPointerException("mActionBar == null!");
-        }
-
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.setDisplayUseLogoEnabled(false);
@@ -71,11 +69,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
      * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p>
+     * <p/>
      * If it isn't installed {@link SupportMapFragment} (and
      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
      * install/update the Google Play services APK on their device.
-     * <p>
+     * <p/>
      * A user can return to this FragmentActivity after following the prompt and correctly
      * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
      * have been completely destroyed during this process (it is likely that it would only be
@@ -93,7 +91,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
     }
 
     /**
-     * <p>
+     * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
@@ -115,6 +113,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
             }
         };
         mMap.setOnMyLocationChangeListener(myLocationChangeListener);
+
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Your GPS seems to be disabled\n Please enable it").create().show();
+        }
     }
 
     @Override
@@ -125,8 +130,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
             currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
             currentMarker.setDraggable(true);
 
-            SpotFragment fragment = SpotFragment.newInstance(latLng);
-            fragmentManager.beginTransaction().add(R.id.mapLayout, fragment).commit();
+            if (fragment == null) {
+                fragment = SpotFragment.newInstance(currentMarker);
+                fragmentManager.beginTransaction().add(R.id.mapLayout, fragment).commit();
+            }
 
             setMapWeight(2);
         }
@@ -139,43 +146,34 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
         }
     }
 
-    @Override
-    public Marker getCurrentMarker() {
-        return currentMarker;
-    }
-
     public MarkerHandler getMarkerHandler() {
         return markerHandler;
     }
 
     @Override
-    public void cancelNewSpot(Fragment fragment) {
+    public void cancelFragment(Fragment fragment) {
         currentMarker.remove();
         currentMarker = null;
 
-        removeFragment(fragment);
+        setMapWeight(0);
+        hideKeyboard();
     }
 
     @Override
-    public void removeFragment(Fragment fragment) {
-        if (!fragment.isDetached()) {
-            fragmentManager.beginTransaction().remove(fragment).commit();
-
-            setMapWeight(0);
-            hideKeyboard();
-        }
+    public Marker getCurrentMarker() {
+        return currentMarker;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         setUpCustomActionBar();
-
         return true;
     }
 
     @Override
-    public SpotInfoWindowAdapter getWindowAdapter() {
-        return windowAdapter;
+    public void hideFragment(Fragment fragment) {
+        setMapWeight(0);
+        hideKeyboard();
     }
 
     private void hideKeyboard() {

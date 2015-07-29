@@ -33,12 +33,19 @@
         <activity
             android:name=".view.MapsActivity"
             android:label="@string/title_activity_maps">
-
-        <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.SpotInfoActivity"
+            android:label="@string/title_activity_spot_info"
+            android:parentActivityName=".view.MapsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.parkourspots.view.MapsActivity" />
         </activity>
     </application>
 

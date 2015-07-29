@@ -2,8 +2,8 @@ package se.parkourspots.controller;
 
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import se.parkourspots.model.Spot;
 
@@ -12,7 +12,17 @@ import se.parkourspots.model.Spot;
  */
 public class MarkerHandler {
 
-    private Map<Marker, Spot> markerMap = new WeakHashMap();
+    private static MarkerHandler instance;
+    private Map<Marker, Spot> markerMap = new HashMap();
+
+    private MarkerHandler() {
+    }
+
+    public static MarkerHandler getInstance() {
+        if (instance == null)
+            instance = new MarkerHandler();
+        return instance;
+    }
 
     public void addMarker(Marker marker, Spot spot) {
         markerMap.put(marker, spot);

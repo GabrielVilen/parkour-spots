@@ -38,8 +38,8 @@
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:hint="Descrption"
-            android:singleLine="true"
+            android:hint="Description"
+            android:singleLine="false"
             android:layout_weight="1" />
 
         <EditText
@@ -63,7 +63,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:hint="Good for"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/size"

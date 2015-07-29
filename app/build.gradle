@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.0 rc2"
     defaultConfig {
         applicationId "se.parkourspots"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
