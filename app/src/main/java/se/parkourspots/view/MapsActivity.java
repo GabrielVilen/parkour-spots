@@ -46,7 +46,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
         setUpMapIfNeeded();
     }
 
-    private void setUpCustomActionBar() {
+    private void inflateCustomActionBar() {
         android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setDisplayShowCustomEnabled(true);
@@ -100,7 +100,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMapClickListener(this);
 
-        windowAdapter = new SpotInfoWindowAdapter(getLayoutInflater());
+        windowAdapter = new SpotInfoWindowAdapter(this);
         mMap.setInfoWindowAdapter(windowAdapter);
 
         fragmentManager = getFragmentManager();
@@ -166,7 +166,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        setUpCustomActionBar();
+        CustomActionBarInflater.getInstance().inflateCustomActionBar(this);
         return true;
     }
 

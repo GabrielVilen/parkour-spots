@@ -11,10 +11,9 @@
         android:text="No Title"
         android:id="@+id/spotTitleInfoWindow"
         android:layout_weight="0.06"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textIsSelectable="false"
-        android:layout_gravity="center_horizontal"
-        android:digits="20" />
+        android:layout_gravity="center_horizontal" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -29,7 +28,7 @@
         android:text="Tap for info"
         android:id="@+id/textView3"
         android:layout_weight="0.06"
-        android:textSize="10dp"
+        android:textSize="10sp"
         android:layout_gravity="center_horizontal"
         android:textStyle="italic" />
 </LinearLayout>

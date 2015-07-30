@@ -32,6 +32,7 @@
             android:layout_height="0dp"
             android:hint="Spot name"
             android:singleLine="true"
+            android:maxLength="20"
             android:layout_weight="1" />
 
         <EditText

@@ -1,6 +1,7 @@
 package se.parkourspots.view;
 
-import android.view.LayoutInflater;
+import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,14 +17,15 @@ import se.parkourspots.model.Spot;
 /**
  * Created by Gabriel on 28/07/2015.
  */
-public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, GoogleMap.OnInfoWindowClickListener {
 
-    private LayoutInflater inflater;
+    private final Activity activity;
+    private Spot spot;
+    public final static String EXTRA_MESSAGE = "se.parkourspots.view.SPOT";
 
-    public SpotInfoWindowAdapter(LayoutInflater inflater) {
-        this.inflater = inflater;
+    public SpotInfoWindowAdapter(Activity activity) {
+        this.activity = activity;
     }
-
     /**
      * Called before <code>getInfoContents</code> on the marker. Customizes the entire info window.
      *
@@ -43,13 +45,13 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
      */
     @Override
     public View getInfoContents(Marker marker) {
-        View view = inflater.inflate(R.layout.info_window, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.info_window, null);
 
         ImageView icon = (ImageView) view.findViewById(R.id.spotIconInfoWindow);
         TextView title = (TextView) view.findViewById(R.id.spotTitleInfoWindow);
 
         MarkerHandler handler = MarkerHandler.getInstance();
-        Spot spot = handler.getSpot(marker);
+        spot = handler.getSpot(marker);
         if (spot != null) {
             if (spot.getName() != null) {
                 title.setText(spot.getName());
@@ -60,5 +62,12 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             }
         }
         return view;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Intent intent = new Intent(activity, SpotInfoActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, spot);
+        activity.startActivity(intent);
     }
 }
