@@ -102,6 +102,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
 
         windowAdapter = new SpotInfoWindowAdapter(this);
         mMap.setInfoWindowAdapter(windowAdapter);
+        mMap.setOnInfoWindowClickListener(windowAdapter);
 
         fragmentManager = getFragmentManager();
         final GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {

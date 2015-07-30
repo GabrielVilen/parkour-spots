@@ -21,7 +21,7 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
 
     private final Activity activity;
     private Spot spot;
-    public final static String EXTRA_MESSAGE = "se.parkourspots.view.SPOT";
+    public final static String EXTRA_MESSAGE_SPOT = "se.parkourspots.view.SPOT";
 
     public SpotInfoWindowAdapter(Activity activity) {
         this.activity = activity;
@@ -67,7 +67,7 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent intent = new Intent(activity, SpotInfoActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, spot);
+        intent.putExtra(EXTRA_MESSAGE_SPOT, spot);
         activity.startActivity(intent);
     }
 }

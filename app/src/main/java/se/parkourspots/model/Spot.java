@@ -1,25 +1,21 @@
 package se.parkourspots.model;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.Serializable;
 
 /**
  * Created by Gabriel on 24/07/2015.
  */
-public class Spot implements Serializable {
+public class Spot implements Parcelable {
     private String name;
     private String description;
     private Bitmap photo;
     private Marker marker;
-    private GoogleMap.InfoWindowAdapter windowAdapter;
 
-    public Spot(Marker markers) {
+    public Spot(Marker marker) {
         this.marker = marker;
     }
 
@@ -55,7 +51,13 @@ public class Spot implements Serializable {
         this.marker = marker;
     }
 
-    public void setInfoWindowAdapter(GoogleMap.InfoWindowAdapter windowAdapter) {
-        this.windowAdapter = windowAdapter;
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }
