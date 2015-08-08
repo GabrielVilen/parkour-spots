@@ -32,7 +32,7 @@
 
         <fragment
             android:id="@+id/spotFragment"
-            android:name="se.parkourspots.view.SpotFragment"
+            android:name="se.parkourspots.view.NewSpotFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

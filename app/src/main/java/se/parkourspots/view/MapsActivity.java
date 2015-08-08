@@ -26,14 +26,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import se.parkourspots.R;
 import se.parkourspots.controller.MarkerHandler;
 
-public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener, SpotFragment.OnFragmentInteractionListener {
+public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener, NewSpotFragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private FragmentManager fragmentManager;
     private Marker currentMarker;
     private MarkerHandler markerHandler;
     private SpotInfoWindowAdapter windowAdapter;
-    private SpotFragment fragment;
+    private NewSpotFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
      * method in {@link #onResume()} to guarantee that it will be called.
      */
-    private void setUpMapIfNeeded() {   // TODO: Varna om GPS avstängd!
+    private void setUpMapIfNeeded() {
         if (mMap == null) {
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
@@ -132,7 +132,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
             currentMarker.setDraggable(true);
 
             if (fragment == null) {
-                fragment = SpotFragment.newInstance(currentMarker);
+                fragment = NewSpotFragment.newInstance(currentMarker);
                 fragmentManager.beginTransaction().add(R.id.mapLayout, fragment).commit();
             }
 

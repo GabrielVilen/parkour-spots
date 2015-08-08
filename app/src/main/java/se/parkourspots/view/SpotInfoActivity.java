@@ -12,8 +12,9 @@ import se.parkourspots.model.Spot;
 
 public class SpotInfoActivity extends AppCompatActivity {
 
-    TextView twSpotTitle, twDescription;
-    ImageView photoView1;
+    private TextView twSpotTitle, twDescription;
+    private ImageView photoView1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,14 @@ public class SpotInfoActivity extends AppCompatActivity {
         twSpotTitle = (TextView) findViewById(R.id.spotTitleInfoActivity);
         photoView1 = (ImageView) findViewById(R.id.photo1InfoActivity);
 
-        Spot spot = (Spot) getIntent().getSerializableExtra(SpotInfoWindowAdapter.EXTRA_MESSAGE_SPOT);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle == null) {
+            throw new NullPointerException("BUNDLE is null! ");
+        }
+        Spot spot = bundle.getParcelable(SpotInfoWindowAdapter.EXTRA_MESSAGE_SPOT); // TODO: fix null
+        if (spot == null) {
+            throw new NullPointerException("SPOT is null! ");
+        }
 
         twSpotTitle.setText(spot.getName());
         photoView1.setImageBitmap(spot.getPhoto());
@@ -51,4 +59,5 @@ public class SpotInfoActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

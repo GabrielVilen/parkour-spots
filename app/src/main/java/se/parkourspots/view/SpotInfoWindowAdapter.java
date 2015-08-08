@@ -19,13 +19,16 @@ import se.parkourspots.model.Spot;
  */
 public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, GoogleMap.OnInfoWindowClickListener {
 
+
     private final Activity activity;
     private Spot spot;
     public final static String EXTRA_MESSAGE_SPOT = "se.parkourspots.view.SPOT";
+    private MarkerHandler handler;
 
     public SpotInfoWindowAdapter(Activity activity) {
         this.activity = activity;
     }
+
     /**
      * Called before <code>getInfoContents</code> on the marker. Customizes the entire info window.
      *
@@ -50,8 +53,15 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
         ImageView icon = (ImageView) view.findViewById(R.id.spotIconInfoWindow);
         TextView title = (TextView) view.findViewById(R.id.spotTitleInfoWindow);
 
-        MarkerHandler handler = MarkerHandler.getInstance();
+        handler = MarkerHandler.getInstance();
+        if (handler == null) {
+            throw new NullPointerException("HANDLER is null!");
+        }
         spot = handler.getSpot(marker);
+        if (spot == null) {
+            throw new NullPointerException("SPOT IS NULL");
+        }
+
         if (spot != null) {
             if (spot.getName() != null) {
                 title.setText(spot.getName());
@@ -68,6 +78,10 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
     public void onInfoWindowClick(Marker marker) {
         Intent intent = new Intent(activity, SpotInfoActivity.class);
         intent.putExtra(EXTRA_MESSAGE_SPOT, spot);
+        if (spot == null) {
+            throw new NullPointerException("SPOT IS NULL!!!");
+        }
         activity.startActivity(intent);
     }
+
 }

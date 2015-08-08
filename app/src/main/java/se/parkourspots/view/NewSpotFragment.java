@@ -27,12 +27,12 @@ import se.parkourspots.model.Spot;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SpotFragment.OnFragmentInteractionListener} interface
+ * {@link NewSpotFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SpotFragment#newInstance} factory method to
+ * Use the {@link NewSpotFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpotFragment extends Fragment {
+public class NewSpotFragment extends Fragment {
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100, RESULT_CANCELED = 0, RESULT_OK = -1;
     private static final String LAT_LNG = "latLng";
@@ -53,10 +53,10 @@ public class SpotFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param marker Parameter 1.
-     * @return A new instance of fragment SpotFragment.
+     * @return A new instance of fragment .
      */
-    public static SpotFragment newInstance(Marker marker) {
-        SpotFragment fragment = new SpotFragment();
+    public static NewSpotFragment newInstance(Marker marker) {
+        NewSpotFragment fragment = new NewSpotFragment();
 
         Bundle args = new Bundle();
         args.putParcelable(LAT_LNG, marker.getPosition());
@@ -74,7 +74,7 @@ public class SpotFragment extends Fragment {
         }
     }
 
-    public SpotFragment() {
+    public NewSpotFragment() {
     }
 
     public void addNewSpot() {
@@ -86,7 +86,8 @@ public class SpotFragment extends Fragment {
         marker.setDraggable(false);
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
-        spot = new Spot(marker);
+        spot = new Spot();
+        spot.setMarker(marker);
         spot.setName(name);
         spot.setDescription(description);
         spot.setPhoto(photo);
