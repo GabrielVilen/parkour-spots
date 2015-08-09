@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.ArrayList;
+
 import se.parkourspots.R;
 import se.parkourspots.controller.MarkerHandler;
 import se.parkourspots.model.Spot;
@@ -27,12 +29,12 @@ import se.parkourspots.model.Spot;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewSpotFragment.OnFragmentInteractionListener} interface
+ * {@link CreateSpotFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewSpotFragment#newInstance} factory method to
+ * Use the {@link CreateSpotFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewSpotFragment extends Fragment {
+public class CreateSpotFragment extends Fragment {
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100, RESULT_CANCELED = 0, RESULT_OK = -1;
     private static final String LAT_LNG = "latLng";
@@ -42,11 +44,12 @@ public class NewSpotFragment extends Fragment {
     private LatLng latLng;
     private Spot spot;
 
-    private EditText etSpotName, etDescription;
+    private EditText etSpotName, etDescription, etDifficulty, etGoodFor, etGroundMaterial, etSize;
     private ImageView photoView;
     private ImageButton cameraButton;
     private Marker marker;
     private Bitmap photo;
+    private ArrayList<EditText> etList = new ArrayList<>();
 
     /**
      * Use this factory method to create a new instance of
@@ -55,8 +58,8 @@ public class NewSpotFragment extends Fragment {
      * @param marker Parameter 1.
      * @return A new instance of fragment .
      */
-    public static NewSpotFragment newInstance(Marker marker) {
-        NewSpotFragment fragment = new NewSpotFragment();
+    public static CreateSpotFragment newInstance(Marker marker) {
+        CreateSpotFragment fragment = new CreateSpotFragment();
 
         Bundle args = new Bundle();
         args.putParcelable(LAT_LNG, marker.getPosition());
@@ -74,12 +77,16 @@ public class NewSpotFragment extends Fragment {
         }
     }
 
-    public NewSpotFragment() {
+    public CreateSpotFragment() {
     }
 
     public void addNewSpot() {
         String name = etSpotName.getText().toString();
         String description = etDescription.getText().toString();
+        String size = etSize.getText().toString();
+        String difficulty = etDifficulty.getText().toString();
+        String material = etGroundMaterial.getText().toString();
+        String goodFor = etGoodFor.getText().toString();
 
         marker = mListener.getCurrentMarker();
         marker.setTitle(name);
@@ -87,10 +94,15 @@ public class NewSpotFragment extends Fragment {
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
         spot = new Spot();
+        spot.setSize(size);
+        spot.setDifficulty(difficulty);
+        spot.setGoodFor(goodFor);
+        spot.setMaterial(material);
         spot.setMarker(marker);
         spot.setName(name);
         spot.setDescription(description);
-        spot.setPhoto(photo);
+        if (photo != null)
+            spot.setPhoto(photo);
 
         markerHandler.addMarker(marker, spot);
 
@@ -108,22 +120,30 @@ public class NewSpotFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_spot, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_spot, container, false);
 
         etSpotName = (EditText) view.findViewById(R.id.spotName);
         etDescription = (EditText) view.findViewById(R.id.description);
+        etDifficulty = (EditText) view.findViewById(R.id.difficulty);
+        etGroundMaterial = (EditText) view.findViewById(R.id.ground);
+        etGoodFor = (EditText) view.findViewById(R.id.goodFor);
+        etSize = (EditText) view.findViewById(R.id.size);
         photoView = (ImageView) view.findViewById(R.id.photoView);
         cameraButton = (ImageButton) view.findViewById(R.id.cameraButton);
+
+        etList.add(etDescription);
+        etList.add(etSpotName);
+        etList.add(etDifficulty);
+        etList.add(etGoodFor);
+        etList.add(etSize);
+        etList.add(etGroundMaterial);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()) {
-                    case (R.id.addNewSpot):
+                    case (R.id.saveNewSpot):
                         addNewSpot();
-                        break;
-                    case (R.id.cancelNewSpot):
-                        cancelNewSpot();
                         break;
                     case (R.id.cameraButton):
                         takePhoto();
@@ -131,8 +151,7 @@ public class NewSpotFragment extends Fragment {
                 }
             }
         };
-        view.findViewById(R.id.addNewSpot).setOnClickListener(listener);
-        view.findViewById(R.id.cancelNewSpot).setOnClickListener(listener);
+        view.findViewById(R.id.saveNewSpot).setOnClickListener(listener);
         cameraButton.setOnClickListener(listener);
 
         return view;
@@ -154,27 +173,33 @@ public class NewSpotFragment extends Fragment {
         }
     }
 
-    private void clearFields() {
-        etSpotName.setText("");
-        etDescription.setText("");
+    void clearFields() {
+        Log.d("SPOT", "clearFields CALLED!");
+        for (int i = 0; i < etList.size(); i++) {
+            etList.get(i).setText("");
+            etList.get(i).clearFocus();
+        }
         photoView.setImageResource(android.R.color.white);
         cameraButton.setVisibility(View.VISIBLE);
+        getView().scrollTo(0, 0);
+
     }
 
-    private void cancelNewSpot() {
-        mListener.cancelFragment(this);
-        clearFields();
+    @Override
+    public void onDestroyView() {
+        clearFields(); // TODO: fixa så den kallasa
+
+        super.onDestroyView();
+
     }
 
     private void hideFragment() {
         mListener.hideFragment(this);
-        clearFields();
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d("SPOT", "onAttach() " + this.toString());
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -196,8 +221,6 @@ public class NewSpotFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void cancelFragment(Fragment fragment);
-
         void hideFragment(Fragment fragment);
 
         Marker getCurrentMarker();

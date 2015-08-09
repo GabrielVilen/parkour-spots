@@ -105,26 +105,14 @@
             android:layout_weight="1">
 
             <Button
-                android:id="@+id/addNewSpot"
-                android:layout_width="wrap_content"
+                android:id="@+id/saveNewSpot"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="#ff73ff00"
-                android:text="Add spot"
+                android:text="Save"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:elevation="6dp" />
-
-            <Button
-                android:id="@+id/cancelNewSpot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#ffff4d3f"
-                android:text="Cancel"
-                android:elevation="6dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentEnd="true" />
 
         </RelativeLayout>
 

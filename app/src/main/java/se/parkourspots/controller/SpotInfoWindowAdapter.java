@@ -1,4 +1,4 @@
-package se.parkourspots.view;
+package se.parkourspots.controller;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,8 +10,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
 import se.parkourspots.R;
-import se.parkourspots.controller.MarkerHandler;
 import se.parkourspots.model.Spot;
+import se.parkourspots.view.SpotInfoActivity;
 
 
 /**
@@ -19,16 +19,13 @@ import se.parkourspots.model.Spot;
  */
 public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, GoogleMap.OnInfoWindowClickListener {
 
-
     private final Activity activity;
     private Spot spot;
     public final static String EXTRA_MESSAGE_SPOT = "se.parkourspots.view.SPOT";
-    private MarkerHandler handler;
 
     public SpotInfoWindowAdapter(Activity activity) {
         this.activity = activity;
     }
-
     /**
      * Called before <code>getInfoContents</code> on the marker. Customizes the entire info window.
      *
@@ -53,15 +50,8 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
         ImageView icon = (ImageView) view.findViewById(R.id.spotIconInfoWindow);
         TextView title = (TextView) view.findViewById(R.id.spotTitleInfoWindow);
 
-        handler = MarkerHandler.getInstance();
-        if (handler == null) {
-            throw new NullPointerException("HANDLER is null!");
-        }
+        MarkerHandler handler = MarkerHandler.getInstance();
         spot = handler.getSpot(marker);
-        if (spot == null) {
-            throw new NullPointerException("SPOT IS NULL");
-        }
-
         if (spot != null) {
             if (spot.getName() != null) {
                 title.setText(spot.getName());
@@ -71,6 +61,7 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
                 icon.setImageBitmap(spot.getPhoto());
             }
         }
+
         return view;
     }
 
@@ -78,10 +69,6 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
     public void onInfoWindowClick(Marker marker) {
         Intent intent = new Intent(activity, SpotInfoActivity.class);
         intent.putExtra(EXTRA_MESSAGE_SPOT, spot);
-        if (spot == null) {
-            throw new NullPointerException("SPOT IS NULL!!!");
-        }
         activity.startActivity(intent);
     }
-
 }

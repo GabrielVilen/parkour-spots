@@ -8,11 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import se.parkourspots.R;
+import se.parkourspots.controller.SpotInfoWindowAdapter;
 import se.parkourspots.model.Spot;
 
 public class SpotInfoActivity extends AppCompatActivity {
 
-    private TextView twSpotTitle, twDescription;
+    private TextView twSpotTitle, twDescription, twDifficulty, twSize, twGroundMaterial, twGoodFor;
     private ImageView photoView1;
 
 
@@ -22,42 +23,40 @@ public class SpotInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_spot_info);
 
         twSpotTitle = (TextView) findViewById(R.id.spotTitleInfoActivity);
+        twDescription = (TextView) findViewById(R.id.descriptionInfoActivity);
+        twGroundMaterial = (TextView) findViewById(R.id.groundMaterialInfoActivity);
+        twDifficulty = (TextView) findViewById(R.id.difficultyInfoActivity);
+        twSize = (TextView) findViewById(R.id.sizeInfoActivity);
+        twGoodFor = (TextView) findViewById(R.id.goodForInfoActivity);
         photoView1 = (ImageView) findViewById(R.id.photo1InfoActivity);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle == null) {
-            throw new NullPointerException("BUNDLE is null! ");
-        }
-        Spot spot = bundle.getParcelable(SpotInfoWindowAdapter.EXTRA_MESSAGE_SPOT); // TODO: fix null
-        if (spot == null) {
-            throw new NullPointerException("SPOT is null! ");
-        }
+        Spot spot = getIntent().getParcelableExtra(SpotInfoWindowAdapter.EXTRA_MESSAGE_SPOT);
 
-        twSpotTitle.setText(spot.getName());
-        photoView1.setImageBitmap(spot.getPhoto());
-
-        // MarkerHandler.getInstance().getSpot()
+        if (spot != null) {
+            twSpotTitle.setText(spot.getName());
+            twDescription.setText(spot.getDescription());
+            twDifficulty.setText(spot.getDifficulty());
+            twGoodFor.setText(spot.getGoodFor());
+            twSize.setText(spot.getSize());
+            twGroundMaterial.setText(spot.getMaterial());
+            photoView1.setImageBitmap(spot.getPhoto());
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        CustomActionBarInflater.getInstance().inflateCustomActionBar(this);
+        getMenuInflater().inflate(R.menu.menu_spot_info, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == android.R.id.home) {
+            finish();
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
 }

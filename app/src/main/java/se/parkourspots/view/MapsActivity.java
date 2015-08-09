@@ -8,7 +8,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +24,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import se.parkourspots.R;
 import se.parkourspots.controller.MarkerHandler;
+import se.parkourspots.controller.SpotInfoWindowAdapter;
 
-public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener, NewSpotFragment.OnFragmentInteractionListener {
+public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, CreateSpotFragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private FragmentManager fragmentManager;
     private Marker currentMarker;
     private MarkerHandler markerHandler;
     private SpotInfoWindowAdapter windowAdapter;
-    private NewSpotFragment fragment;
+    private CreateSpotFragment fragment;
+    private LatLng currentLoc;
+    private boolean isVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,19 +46,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
         setContentView(R.layout.activity_maps);
 
         setUpMapIfNeeded();
-    }
-
-    private void inflateCustomActionBar() {
-        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setDisplayShowTitleEnabled(false);
-        mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setDisplayUseLogoEnabled(false);
-        mActionBar.setDisplayShowHomeEnabled(false);
-
-        View customView = getLayoutInflater().inflate(R.layout.action_bar_custom, null);
-        mActionBar.setCustomView(customView);
-        Toolbar parent = (Toolbar) customView.getParent();
-        parent.setContentInsetsAbsolute(0, 0);
     }
 
     @Override
@@ -97,7 +86,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
     private void setUpMap() {
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setMyLocationEnabled(true);
-        mMap.setOnMapLongClickListener(this);
         mMap.setOnMapClickListener(this);
 
         windowAdapter = new SpotInfoWindowAdapter(this);
@@ -108,8 +96,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
         final GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-                LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 13.5f));
+                currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 13.5f));
                 mMap.setOnMyLocationChangeListener(null);
             }
         };
@@ -120,22 +108,28 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Your GPS seems to be disabled\n Please enable it").create().show();
+            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                builder.create().dismiss();
+            }
         }
     }
 
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        if (currentMarker != null && currentMarker.isDraggable()) {
-            currentMarker.setPosition(latLng);
+    public void toggleNewSpot(View view) {
+        if (isVisible) {
+            cancelFragment();
         } else {
-            currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            currentMarker.setDraggable(true);
-
-            if (fragment == null) {
-                fragment = NewSpotFragment.newInstance(currentMarker);
-                fragmentManager.beginTransaction().add(R.id.mapLayout, fragment).commit();
+            isVisible = true;
+            if (currentLoc != null) {
+                currentMarker = mMap.addMarker(new MarkerOptions().position(currentLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLoc));
+                currentMarker.setDraggable(true);
             }
-
+            if (fragment == null) {
+                fragment = CreateSpotFragment.newInstance(currentMarker);
+                fragmentManager.beginTransaction().add(R.id.mapLayout, fragment).commit();
+            } else {
+                fragmentManager.beginTransaction().attach(fragment).commit();
+            }
             setMapWeight(2);
         }
     }
@@ -144,6 +138,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
     public void onMapClick(LatLng latLng) {
         if (currentMarker != null && currentMarker.isDraggable()) {
             currentMarker.setPosition(latLng);
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
     }
 
@@ -151,8 +146,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
         return markerHandler;
     }
 
-    @Override
-    public void cancelFragment(Fragment fragment) {
+    private void cancelFragment() {
+        fragmentManager.beginTransaction().detach(fragment).commit();
         currentMarker.remove();
         currentMarker = null;
 
@@ -167,17 +162,19 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapLo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        CustomActionBarInflater.getInstance().inflateCustomActionBar(this);
+        getMenuInflater().inflate(R.menu.menu_map, menu);
         return true;
     }
 
     @Override
     public void hideFragment(Fragment fragment) {
+        fragmentManager.beginTransaction().detach(fragment).commit();
         setMapWeight(0);
         hideKeyboard();
     }
 
     private void hideKeyboard() {
+        isVisible = false;
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

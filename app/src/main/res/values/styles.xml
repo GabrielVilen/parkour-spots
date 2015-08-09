@@ -2,7 +2,15 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/wallet_holo_blue_light</item>
+
+        <!-- colorAccent is used for floating action buttons (fab) -->
+        <item name="colorAccent">#ff00789b</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">#0099cc</item>
+
     </style>
 
 </resources>
