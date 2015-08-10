@@ -1,6 +1,5 @@
 package se.parkourspots.view;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.location.Location;
@@ -103,6 +102,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         };
         mMap.setOnMyLocationChangeListener(myLocationChangeListener);
 
+        checkGPS();
+    }
+
+    private void checkGPS() {
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -116,22 +119,54 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
 
     public void toggleNewSpot(View view) {
         if (isVisible) {
-            cancelFragment();
+            currentMarker.remove();
+            currentMarker = null;
+            detachFragment();
         } else {
-            isVisible = true;
-            if (currentLoc != null) {
-                currentMarker = mMap.addMarker(new MarkerOptions().position(currentLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLoc));
-                currentMarker.setDraggable(true);
-            }
-            if (fragment == null) {
-                fragment = CreateSpotFragment.newInstance(currentMarker);
-                fragmentManager.beginTransaction().add(R.id.mapLayout, fragment).commit();
-            } else {
-                fragmentManager.beginTransaction().attach(fragment).commit();
-            }
-            setMapWeight(2);
+            attachFragment();
         }
+    }
+
+    private void attachFragment() {
+        isVisible = true;
+        if (currentLoc != null) {
+            currentMarker = mMap.addMarker(new MarkerOptions().position(currentLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLoc));
+            currentMarker.setDraggable(true);
+        }
+        if (fragment == null) {
+            fragmentManager.beginTransaction().add(R.id.mapLayout, CreateSpotFragment.newInstance(currentMarker)).commit();
+            fragment = (CreateSpotFragment) fragmentManager.findFragmentById(R.id.createSpotFragment);
+        } else {
+            fragmentManager.beginTransaction().attach(fragment).commit();
+        }
+
+        setMapWeight(2);
+    }
+
+    @Override
+    public void detachFragment() {
+        hideKeyboard();
+        isVisible = false;
+        fragment.clearFields();
+        fragmentManager.beginTransaction().detach(fragment).commit();
+
+        setMapWeight(0);
+    }
+
+    @Override
+    public void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+
+    private void setMapWeight(int weight) {
+        LinearLayout layout = (LinearLayout) findViewById(R.id.mapLayout);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, weight));
     }
 
     @Override
@@ -146,15 +181,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         return markerHandler;
     }
 
-    private void cancelFragment() {
-        fragmentManager.beginTransaction().detach(fragment).commit();
-        currentMarker.remove();
-        currentMarker = null;
-
-        setMapWeight(0);
-        hideKeyboard();
-    }
-
     @Override
     public Marker getCurrentMarker() {
         return currentMarker;
@@ -166,24 +192,4 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         return true;
     }
 
-    @Override
-    public void hideFragment(Fragment fragment) {
-        fragmentManager.beginTransaction().detach(fragment).commit();
-        setMapWeight(0);
-        hideKeyboard();
-    }
-
-    private void hideKeyboard() {
-        isVisible = false;
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-    private void setMapWeight(int weight) {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.mapLayout);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, weight));
-    }
 }

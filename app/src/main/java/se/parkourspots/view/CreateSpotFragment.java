@@ -6,13 +6,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -50,6 +51,7 @@ public class CreateSpotFragment extends Fragment {
     private Marker marker;
     private Bitmap photo;
     private ArrayList<EditText> etList = new ArrayList<>();
+    private ScrollView scrollView;
 
     /**
      * Use this factory method to create a new instance of
@@ -106,7 +108,7 @@ public class CreateSpotFragment extends Fragment {
 
         markerHandler.addMarker(marker, spot);
 
-        hideFragment();
+        mListener.detachFragment();
     }
 
     @Override
@@ -130,6 +132,7 @@ public class CreateSpotFragment extends Fragment {
         etSize = (EditText) view.findViewById(R.id.size);
         photoView = (ImageView) view.findViewById(R.id.photoView);
         cameraButton = (ImageButton) view.findViewById(R.id.cameraButton);
+        scrollView = (ScrollView) view.findViewById(R.id.scrollView);
 
         etList.add(etDescription);
         etList.add(etSpotName);
@@ -159,6 +162,7 @@ public class CreateSpotFragment extends Fragment {
 
     private void takePhoto() {
         Toast.makeText(getActivity(), "Starting camera", Toast.LENGTH_SHORT).show();
+        mListener.hideKeyboard();
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -174,27 +178,16 @@ public class CreateSpotFragment extends Fragment {
     }
 
     void clearFields() {
-        Log.d("SPOT", "clearFields CALLED!");
         for (int i = 0; i < etList.size(); i++) {
             etList.get(i).setText("");
             etList.get(i).clearFocus();
         }
         photoView.setImageResource(android.R.color.white);
         cameraButton.setVisibility(View.VISIBLE);
-        getView().scrollTo(0, 0);
+        scrollView.scrollTo(0, 0);
 
-    }
-
-    @Override
-    public void onDestroyView() {
-        clearFields(); // TODO: fixa så den kallasa
-
-        super.onDestroyView();
-
-    }
-
-    private void hideFragment() {
-        mListener.hideFragment(this);
+        LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.mapLayout);
+        layout.requestFocus();
     }
 
     @Override
@@ -221,7 +214,9 @@ public class CreateSpotFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void hideFragment(Fragment fragment);
+        void detachFragment();
+
+        void hideKeyboard();
 
         Marker getCurrentMarker();
     }

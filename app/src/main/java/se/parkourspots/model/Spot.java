@@ -38,7 +38,7 @@ public class Spot implements Parcelable {
 
         try {
             photo = Bitmap.CREATOR.createFromParcel(source);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             // Ignore. Exception thrown if no bitmap exist.
         }
     }
@@ -60,8 +60,11 @@ public class Spot implements Parcelable {
         dest.writeString(size);
         dest.writeString(material);
 
-        if (photo != null)
+        if (photo != null) {
             photo.writeToParcel(dest, 0);
+            photo.recycle(); // deletes old photo
+            photo = null;
+        }
     }
 
     /**

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Parkour Spots</string>
-    <string name="title_activity_maps">Spot map</string>
 
     <string name="title_activity_spot_info">Spot info</string>
 

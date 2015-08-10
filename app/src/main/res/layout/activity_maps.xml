@@ -12,6 +12,8 @@
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/mapLayout"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0"
@@ -34,7 +36,7 @@
             android:orientation="vertical">
 
             <fragment
-                android:id="@+id/spotFragment"
+                android:id="@+id/createSpotFragment"
                 android:name="se.parkourspots.view.CreateSpotFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
