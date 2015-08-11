@@ -3,6 +3,7 @@ package se.parkourspots.model;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.Marker;
 
@@ -62,8 +63,6 @@ public class Spot implements Parcelable {
 
         if (photo != null) {
             photo.writeToParcel(dest, 0);
-            photo.recycle(); // deletes old photo
-            photo = null;
         }
     }
 
@@ -87,10 +86,12 @@ public class Spot implements Parcelable {
             };
 
     public String getName() {
+        Log.d("SPOT", this + " getting name " + name);
         return name;
     }
 
     public void setName(String name) {
+        Log.d("SPOT", this + " setting name " + name);
         this.name = name;
     }
 
@@ -146,4 +147,7 @@ public class Spot implements Parcelable {
         this.marker = marker;
     }
 
+    public Marker getMarker() {
+        return marker;
+    }
 }

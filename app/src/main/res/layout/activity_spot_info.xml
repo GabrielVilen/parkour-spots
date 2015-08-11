@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -28,42 +28,54 @@
             android:padding="5dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
-        <TextView
+        <EditText
             android:id="@+id/goodForInfoActivity"
-            android:layout_alignBottom="@+id/textView5"
+            android:layout_alignBottom="@+id/EditText5"
             android:layout_alignLeft="@+id/difficultyInfoActivity"
             android:layout_alignStart="@+id/difficultyInfoActivity"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
-        <TextView
-            android:id="@+id/textView5"
+        <EditText
+            android:id="@+id/EditText5"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView7"
+            android:layout_below="@+id/EditText7"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:text="Good for:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
-        <TextView
+        <EditText
             android:id="@+id/difficultyInfoActivity"
-            android:layout_alignBottom="@+id/textView7"
+            android:layout_alignBottom="@+id/EditText7"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_toEndOf="@+id/textView7"
-            android:layout_toRightOf="@+id/textView7"
+            android:layout_toEndOf="@+id/EditText7"
+            android:layout_toRightOf="@+id/EditText7"
             android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
-        <TextView
-            android:id="@+id/textView7"
+        <EditText
+            android:id="@+id/EditText7"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/descriptionInfoActivity"
@@ -72,9 +84,12 @@
             android:layout_width="wrap_content"
             android:text="Difficulty:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
-        <TextView
+        <EditText
             android:gravity="center"
             android:id="@+id/descriptionInfoActivity"
             android:layout_height="wrap_content"
@@ -84,10 +99,13 @@
             android:layout_below="@+id/spotTitleInfoActivity"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
-        <TextView
-            android:id="@+id/textView9"
+        <EditText
+            android:id="@+id/EditText9"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/goodForInfoActivity"
@@ -96,45 +114,57 @@
             android:layout_width="wrap_content"
             android:text="Ground material: "
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
-        <TextView
+        <EditText
             android:id="@+id/groundMaterialInfoActivity"
-            android:layout_alignBottom="@+id/textView9"
+            android:layout_alignBottom="@+id/EditText9"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_toEndOf="@+id/textView9"
-            android:layout_toRightOf="@+id/textView9"
+            android:layout_toEndOf="@+id/EditText9"
+            android:layout_toRightOf="@+id/EditText9"
             android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
-        <TextView
-            android:id="@+id/textView11"
+        <EditText
+            android:id="@+id/EditText11"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView9"
+            android:layout_below="@+id/EditText9"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:text="Size:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
-        <TextView
+        <EditText
             android:id="@+id/sizeInfoActivity"
-            android:layout_alignBottom="@+id/textView11"
+            android:layout_alignBottom="@+id/EditText11"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_toEndOf="@+id/textView11"
-            android:layout_toRightOf="@+id/textView11"
+            android:layout_toEndOf="@+id/EditText11"
+            android:layout_toRightOf="@+id/EditText11"
             android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@android:color/transparent"
+            android:inputType="none"
+            android:focusable="false" />
 
         <ImageView
             android:id="@+id/photo1InfoActivity"
             android:layout_height="300dp"
             android:layout_width="fill_parent"
-            android:layout_below="@+id/textView11"
+            android:layout_below="@+id/EditText11"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"

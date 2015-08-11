@@ -9,7 +9,7 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_settings"
-        android:title="Settings" />
+    <!-- <item-->
+    <!--android:id="@+id/action_settings"-->
+    <!--android:title="Settings" />-->
 </menu>

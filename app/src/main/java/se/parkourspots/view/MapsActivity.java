@@ -2,6 +2,8 @@ package se.parkourspots.view;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -10,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -109,11 +110,19 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Your GPS seems to be disabled\n Please enable it").create().show();
-            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                builder.create().dismiss();
-            }
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setMessage("Your GPS is disabled\n Do you want to enable it?").setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            alert.create().show();
         }
     }
 
@@ -146,21 +155,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
 
     @Override
     public void detachFragment() {
-        hideKeyboard();
+        Keyboard.hideKeyboard(this);
         isVisible = false;
         fragment.clearFields();
         fragmentManager.beginTransaction().detach(fragment).commit();
 
         setMapWeight(0);
-    }
-
-    @Override
-    public void hideKeyboard() {
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
     }
 
 

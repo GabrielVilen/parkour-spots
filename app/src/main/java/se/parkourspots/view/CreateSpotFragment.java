@@ -45,12 +45,12 @@ public class CreateSpotFragment extends Fragment {
     private LatLng latLng;
     private Spot spot;
 
-    private EditText etSpotName, etDescription, etDifficulty, etGoodFor, etGroundMaterial, etSize;
+    private EditText spotName, description, difficulty, goodFor, groundMaterial, size;
     private ImageView photoView;
     private ImageButton cameraButton;
     private Marker marker;
     private Bitmap photo;
-    private ArrayList<EditText> etList = new ArrayList<>();
+    private ArrayList<EditText> textViews = new ArrayList<>();
     private ScrollView scrollView;
 
     /**
@@ -83,12 +83,12 @@ public class CreateSpotFragment extends Fragment {
     }
 
     public void addNewSpot() {
-        String name = etSpotName.getText().toString();
-        String description = etDescription.getText().toString();
-        String size = etSize.getText().toString();
-        String difficulty = etDifficulty.getText().toString();
-        String material = etGroundMaterial.getText().toString();
-        String goodFor = etGoodFor.getText().toString();
+        String name = spotName.getText().toString();
+        String description = this.description.getText().toString();
+        String size = this.size.getText().toString();
+        String difficulty = this.difficulty.getText().toString();
+        String material = groundMaterial.getText().toString();
+        String goodFor = this.goodFor.getText().toString();
 
         marker = mListener.getCurrentMarker();
         marker.setTitle(name);
@@ -103,8 +103,10 @@ public class CreateSpotFragment extends Fragment {
         spot.setMarker(marker);
         spot.setName(name);
         spot.setDescription(description);
-        if (photo != null)
+        if (photo != null) {
             spot.setPhoto(photo);
+            photo = null;
+        }
 
         markerHandler.addMarker(marker, spot);
 
@@ -124,22 +126,15 @@ public class CreateSpotFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_spot, container, false);
 
-        etSpotName = (EditText) view.findViewById(R.id.spotName);
-        etDescription = (EditText) view.findViewById(R.id.description);
-        etDifficulty = (EditText) view.findViewById(R.id.difficulty);
-        etGroundMaterial = (EditText) view.findViewById(R.id.ground);
-        etGoodFor = (EditText) view.findViewById(R.id.goodFor);
-        etSize = (EditText) view.findViewById(R.id.size);
-        photoView = (ImageView) view.findViewById(R.id.photoView);
+        textViews.add(groundMaterial = (EditText) view.findViewById(R.id.ground));
+        textViews.add(description = (EditText) view.findViewById(R.id.description));
+        textViews.add(difficulty = (EditText) view.findViewById(R.id.difficulty));
+        textViews.add(spotName = (EditText) view.findViewById(R.id.spotName));
+        textViews.add(goodFor = (EditText) view.findViewById(R.id.goodFor));
+        textViews.add(size = (EditText) view.findViewById(R.id.size));
         cameraButton = (ImageButton) view.findViewById(R.id.cameraButton);
         scrollView = (ScrollView) view.findViewById(R.id.scrollView);
-
-        etList.add(etDescription);
-        etList.add(etSpotName);
-        etList.add(etDifficulty);
-        etList.add(etGoodFor);
-        etList.add(etSize);
-        etList.add(etGroundMaterial);
+        photoView = (ImageView) view.findViewById(R.id.photoView);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -162,7 +157,7 @@ public class CreateSpotFragment extends Fragment {
 
     private void takePhoto() {
         Toast.makeText(getActivity(), "Starting camera", Toast.LENGTH_SHORT).show();
-        mListener.hideKeyboard();
+        Keyboard.hideKeyboard(getActivity());
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -178,9 +173,9 @@ public class CreateSpotFragment extends Fragment {
     }
 
     void clearFields() {
-        for (int i = 0; i < etList.size(); i++) {
-            etList.get(i).setText("");
-            etList.get(i).clearFocus();
+        for (int i = 0; i < textViews.size(); i++) {
+            textViews.get(i).setText("");
+            textViews.get(i).clearFocus();
         }
         photoView.setImageResource(android.R.color.white);
         cameraButton.setVisibility(View.VISIBLE);
@@ -215,8 +210,6 @@ public class CreateSpotFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void detachFragment();
-
-        void hideKeyboard();
 
         Marker getCurrentMarker();
     }
