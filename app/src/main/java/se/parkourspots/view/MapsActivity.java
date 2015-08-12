@@ -1,6 +1,7 @@
 package se.parkourspots.view;
 
 import android.app.FragmentManager;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import se.parkourspots.R;
+import se.parkourspots.controller.Keyboard;
 import se.parkourspots.controller.MarkerHandler;
 import se.parkourspots.controller.SpotInfoWindowAdapter;
 
@@ -186,9 +189,27 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         return currentMarker;
     }
 
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_search:
+//                Intent intent = new Intent();
+//               // intent.putExtra()
+//                break;
+//        }
+//
+//        return true;
+//    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_map, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName())); // TODO: Sökaktiviteten startas ej
+
         return true;
     }
 

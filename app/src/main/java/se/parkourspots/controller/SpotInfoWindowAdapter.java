@@ -2,7 +2,6 @@ package se.parkourspots.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +28,7 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
         this.activity = activity;
         adapter = this;
     }
+
     /**
      * Called before <code>getInfoContents</code> on the marker. Customizes the entire info window.
      *
@@ -48,7 +48,6 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
      */
     @Override
     public View getInfoContents(Marker marker) {
-        Log.d("SPOT", "getInfoContents"); // TODO: KALLA PÅ METODEN DÅ SPOT ÄNDRATS
         View view = activity.getLayoutInflater().inflate(R.layout.info_window, null);
 
         ImageView icon = (ImageView) view.findViewById(R.id.spotIconInfoWindow);
@@ -76,11 +75,8 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
         activity.startActivity(intent);
     }
 
-    public static SpotInfoWindowAdapter getStaticAdapter() {
-        return adapter;
+    public static void updateContent(Marker marker) {
+        adapter.getInfoContents(marker);
     }
 
-    public void updateContent(Marker marker) {
-        getInfoContents(marker);
-    }
 }

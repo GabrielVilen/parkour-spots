@@ -1,4 +1,4 @@
-package se.parkourspots.view;
+package se.parkourspots.controller;
 
 import android.app.Activity;
 import android.content.Context;

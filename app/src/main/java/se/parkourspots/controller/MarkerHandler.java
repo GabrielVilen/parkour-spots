@@ -3,6 +3,7 @@ package se.parkourspots.controller;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -42,12 +43,23 @@ public class MarkerHandler {
         return null;
     }
 
-    public void removeMarker(Marker marker) {
-        markerMap.remove(marker);
-    }
-
     public Spot getSpot(Marker marker) {
         return markerMap.get(marker);
     }
 
+    public void deleteSpot(Spot spot) {
+        if (markerMap.containsValue(spot)) {
+            markerMap.remove(spot.getMarker());
+            spot.remove();
+        }
+    }
+
+    public ArrayList<Spot> getSpots() {
+        ArrayList<Spot> spots = new ArrayList<>();
+        Iterator it = markerMap.entrySet().iterator();
+        while (it.hasNext()) {
+            spots.add((Spot) ((Map.Entry) it.next()).getValue());
+        }
+        return spots;
+    }
 }

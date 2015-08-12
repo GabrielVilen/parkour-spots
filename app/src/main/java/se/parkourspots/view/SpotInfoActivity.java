@@ -1,20 +1,23 @@
 package se.parkourspots.view;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
 import se.parkourspots.R;
+import se.parkourspots.controller.Keyboard;
 import se.parkourspots.controller.MarkerHandler;
 import se.parkourspots.controller.SpotInfoWindowAdapter;
 import se.parkourspots.model.Spot;
@@ -27,6 +30,7 @@ public class SpotInfoActivity extends AppCompatActivity {
     private boolean inEditMode;
     private Spot spot;
     private boolean isEdited;
+    private MarkerHandler markerHandler;
 
 
     @Override
@@ -43,7 +47,8 @@ public class SpotInfoActivity extends AppCompatActivity {
         textViews.add(size = (EditText) findViewById(R.id.sizeInfoActivity));
         photoView1 = (ImageView) findViewById(R.id.photo1InfoActivity);
 
-        spot = MarkerHandler.getInstance().getSpot((LatLng) getIntent().getParcelableExtra(SpotInfoWindowAdapter.EXTRA_MESSAGE_SPOT));
+        markerHandler = MarkerHandler.getInstance();
+        spot = markerHandler.getSpot((LatLng) getIntent().getParcelableExtra(SpotInfoWindowAdapter.EXTRA_MESSAGE_SPOT));
 
         if (spot != null) {
             spotTitle.setText(spot.getName());
@@ -82,13 +87,12 @@ public class SpotInfoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (isEdited) {
-            Log.d("SPOT", "saving state.");
             spot.setName(spotTitle.getText().toString());
             spot.setDescription(description.getText().toString());
             spot.setDifficulty(difficulty.getText().toString());
             spot.setGoodFor(goodFor.getText().toString());
             spot.setMaterial(groundMaterial.getText().toString());
-            SpotInfoWindowAdapter.getStaticAdapter().updateContent(spot.getMarker()); // TODO: se över
+            SpotInfoWindowAdapter.updateContent(spot.getMarker());
         }
         finish();
     }
@@ -120,8 +124,21 @@ public class SpotInfoActivity extends AppCompatActivity {
     }
 
     public void deleteSpotInfo() {
-        // TODO
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("Are you sure you want to delete this spot?").setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(SpotInfoActivity.this, "Spot deleted", Toast.LENGTH_SHORT).show();
+                        markerHandler.deleteSpot(spot);
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        alert.create().show();
     }
-
 
 }
