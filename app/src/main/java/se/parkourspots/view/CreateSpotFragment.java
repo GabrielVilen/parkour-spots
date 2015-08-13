@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 import se.parkourspots.R;
 import se.parkourspots.controller.Keyboard;
-import se.parkourspots.controller.MarkerHandler;
+import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.model.Spot;
 
 
@@ -41,7 +41,7 @@ public class CreateSpotFragment extends Fragment {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100, RESULT_CANCELED = 0, RESULT_OK = -1;
     private static final String LAT_LNG = "latLng";
 
-    private MarkerHandler markerHandler;
+    private SpotHandler spotHandler;
     private OnFragmentInteractionListener mListener;
     private LatLng latLng;
     private Spot spot;
@@ -74,7 +74,7 @@ public class CreateSpotFragment extends Fragment {
     private void setUpHandler() {
         try {
             MapsActivity activity = (MapsActivity) getActivity();
-            markerHandler = activity.getMarkerHandler();
+            spotHandler = activity.getSpotHandler();
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -109,7 +109,7 @@ public class CreateSpotFragment extends Fragment {
             photo = null;
         }
 
-        markerHandler.addMarker(marker, spot);
+        spotHandler.addMarker(marker, spot);
 
         mListener.detachFragment();
     }

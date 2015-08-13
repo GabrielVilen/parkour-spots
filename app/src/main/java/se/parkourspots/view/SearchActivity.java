@@ -4,16 +4,15 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import se.parkourspots.R;
-import se.parkourspots.controller.MarkerHandler;
+import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.model.Spot;
 
 /**
@@ -22,14 +21,15 @@ import se.parkourspots.model.Spot;
 
 public class SearchActivity extends ListActivity {
 
-    private SimpleCursorAdapter mAdapter;
-    private String[] spotNames;
-    private ListView listView;
+    public static final String EXTRA_MESSAGE_SPOT_NAME = "se.parkourspots.view.SearchActivity";
+    private TextView queryText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listView = (ListView) findViewById(R.id.listView);
+        setContentView(R.layout.activity_search);
+        queryText = (TextView) findViewById(R.id.queryText);
+
         handleIntent(getIntent());
     }
 
@@ -40,31 +40,34 @@ public class SearchActivity extends ListActivity {
 
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.d("SPOT", "Searched  = " + query);
+            String query = intent.getStringExtra(SearchManager.QUERY).toLowerCase();
+            queryText.setText(query);
             search(query);
         }
     }
 
     private void search(String query) {
-        ArrayList<Spot> spots = MarkerHandler.getInstance().getSpots();
-
-        spotNames = new String[spots.size()];
-        int i = 0;
+        ArrayList<Spot> spots = SpotHandler.getInstance().getSpots();
+        ArrayList<String> spotNames = new ArrayList<>();
         for (Spot spot : spots) {
-            if (spot.getName().contains(query)) {
-                spotNames[i] = spot.getName();
-                i++;
+            if (spot.getName().toLowerCase().contains(query)) {
+                spotNames.add(spot.getName());
             }
         }
-        ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(this, android.R.layout.simple_list_item_1, spots);
-        setListAdapter(adapter);
-
+        if (!spotNames.isEmpty()) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1, spotNames);
+            setListAdapter(adapter);
+        }
     }
 
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView listView, View view, int position, long id) {
         // TODO : Do something when a list item is clicked
+        Intent intent = new Intent(this, SpotInfoActivity.class);
+        String spotName = (String) listView.getItemAtPosition(position);
+        intent.putExtra(EXTRA_MESSAGE_SPOT_NAME, spotName);
+
+        startActivity(intent);
     }
 }

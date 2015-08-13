@@ -26,7 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import se.parkourspots.R;
 import se.parkourspots.controller.Keyboard;
-import se.parkourspots.controller.MarkerHandler;
+import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.controller.SpotInfoWindowAdapter;
 
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, CreateSpotFragment.OnFragmentInteractionListener {
@@ -34,7 +34,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private FragmentManager fragmentManager;
     private Marker currentMarker;
-    private MarkerHandler markerHandler;
+    private SpotHandler spotHandler;
     private SpotInfoWindowAdapter windowAdapter;
     private CreateSpotFragment fragment;
     private LatLng currentLoc;
@@ -43,11 +43,17 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (markerHandler == null) {
-            markerHandler = MarkerHandler.getInstance();
+        if (spotHandler == null) {
+            spotHandler = SpotHandler.getInstance();
         }
         setContentView(R.layout.activity_maps);
 
+        setUpMapIfNeeded();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         setUpMapIfNeeded();
     }
 
@@ -180,8 +186,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         }
     }
 
-    public MarkerHandler getMarkerHandler() {
-        return markerHandler;
+    public SpotHandler getSpotHandler() {
+        return spotHandler;
     }
 
     @Override

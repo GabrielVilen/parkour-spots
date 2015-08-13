@@ -6,7 +6,7 @@
     android:fillViewport="true"
     android:theme="@style/Theme.AppCompat.Light.Dialog"
     tools:context=".MapsActivity"
-    android:background="#E3F2FD">
+    android:background="@color/light_blue_background">
 
     <LinearLayout
         android:layout_width="match_parent"

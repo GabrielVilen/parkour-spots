@@ -13,17 +13,17 @@ import se.parkourspots.model.Spot;
 /**
  * Created by Gabriel on 27/07/2015.
  */
-public class MarkerHandler {
+public class SpotHandler {
 
-    private static MarkerHandler instance;
+    private static SpotHandler instance;
     private Map<Marker, Spot> markerMap = new HashMap();
 
-    private MarkerHandler() {
+    private SpotHandler() {
     }
 
-    public static MarkerHandler getInstance() {
+    public static SpotHandler getInstance() {
         if (instance == null)
-            instance = new MarkerHandler();
+            instance = new SpotHandler();
         return instance;
     }
 
@@ -61,5 +61,18 @@ public class MarkerHandler {
             spots.add((Spot) ((Map.Entry) it.next()).getValue());
         }
         return spots;
+    }
+
+
+    public Spot getSpot(String spotName) {
+        Iterator it = markerMap.entrySet().iterator();
+        Spot spot = null;
+        while (it.hasNext()) {
+            spot = (Spot) ((Map.Entry) it.next()).getValue();
+            if (spot.getName().equals(spotName)) {
+                return spot;
+            }
+        }
+        return spot;
     }
 }
