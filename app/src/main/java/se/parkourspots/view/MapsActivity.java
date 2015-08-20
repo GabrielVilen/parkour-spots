@@ -25,9 +25,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import se.parkourspots.R;
-import se.parkourspots.controller.Keyboard;
 import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.controller.SpotInfoWindowAdapter;
+import se.parkourspots.util.Keyboard;
 
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, CreateSpotFragment.OnFragmentInteractionListener {
 
@@ -160,6 +160,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         }
 
         setMapWeight(2);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+
     }
 
     @Override

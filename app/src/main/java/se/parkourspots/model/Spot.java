@@ -6,10 +6,12 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.Marker;
 
+import java.io.Serializable;
+
 /**
  * Created by Gabriel on 24/07/2015.
  */
-public class Spot implements Parcelable {
+public class Spot implements Parcelable, Serializable {
 
     private String name, description, goodFor, material, size, difficulty;
     private Bitmap photo;

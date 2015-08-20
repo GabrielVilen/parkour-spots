@@ -23,9 +23,9 @@ import com.google.android.gms.maps.model.Marker;
 import java.util.ArrayList;
 
 import se.parkourspots.R;
-import se.parkourspots.controller.Keyboard;
 import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.model.Spot;
+import se.parkourspots.util.Keyboard;
 
 
 /**
