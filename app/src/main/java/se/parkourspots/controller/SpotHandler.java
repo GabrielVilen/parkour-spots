@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import se.parkourspots.model.Spot;
 
@@ -77,15 +76,11 @@ public class SpotHandler {
         return spot;
     }
 
-    public Set getSet() {
-        return map.entrySet();
-    }
-
-    public void putSet(Map.Entry<Marker, Spot> entry) {
-        map.put(entry.getKey(), entry.getValue());
-    }
-
     public void setMap(Map map) {
         this.map = map;
+    }
+
+    public Map<Marker, Spot> getMap() {
+        return map;
     }
 }

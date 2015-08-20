@@ -24,9 +24,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+
 import se.parkourspots.R;
 import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.controller.SpotInfoWindowAdapter;
+import se.parkourspots.util.FileSaver;
 import se.parkourspots.util.Keyboard;
 
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, CreateSpotFragment.OnFragmentInteractionListener {
@@ -63,15 +66,25 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         setUpMapIfNeeded();
     }
 
+    private void getSavedMap() {
+        if (spotHandler != null) {
+            try {
+                SpotHandler.getInstance().setMap(FileSaver.getMapFromFile());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
      * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
+     * <p>
      * If it isn't installed {@link SupportMapFragment} (and
      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
      * install/update the Google Play services APK on their device.
-     * <p/>
+     * <p>
      * A user can return to this FragmentActivity after following the prompt and correctly
      * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
      * have been completely destroyed during this process (it is likely that it would only be
@@ -84,12 +97,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
                     .getMap();
             if (mMap != null) {
                 setUpMap();
+                getSavedMap();
             }
         }
     }
 
     /**
-     * <p/>
+     * <p>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
@@ -166,7 +180,15 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     protected void onPause() {
         super.onPause();
 
+        saveMapToFile();
+    }
 
+    private void saveMapToFile() {
+        try {
+            FileSaver.saveMapToFile(spotHandler.getMap(), getBaseContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -202,18 +224,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         return currentMarker;
     }
 
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                Intent intent = new Intent();
-//               // intent.putExtra()
-//                break;
-//        }
-//
-//        return true;
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
