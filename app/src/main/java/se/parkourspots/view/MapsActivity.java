@@ -31,6 +31,7 @@ import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.controller.SpotInfoWindowAdapter;
 import se.parkourspots.util.FileSaver;
 import se.parkourspots.util.Keyboard;
+import se.parkourspots.util.PeristanceSaver;
 
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, CreateSpotFragment.OnFragmentInteractionListener {
 
@@ -42,6 +43,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     private CreateSpotFragment fragment;
     private LatLng currentLoc;
     private boolean isVisible;
+    private String fileName = "test"; // TODO check if this works
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     private void getSavedMap() {
         if (spotHandler != null) {
             try {
-                SpotHandler.getInstance().setMap(FileSaver.getMapFromFile());
+                PeristanceSaver.writeObjectToFile(getApplicationContext(), fileName);
+                //SpotHandler.getInstance().setMap(FileSaver.getMapFromFile());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -97,7 +100,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
                     .getMap();
             if (mMap != null) {
                 setUpMap();
-                getSavedMap();
+                restorePersistance();
+                // getSavedMap();
             }
         }
     }
@@ -180,7 +184,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     protected void onPause() {
         super.onPause();
 
-        saveMapToFile();
+        savePersistance();
+        //saveMapToFile();
     }
 
     private void saveMapToFile() {
@@ -190,6 +195,16 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
             e.printStackTrace();
         }
     }
+
+    private void savePersistance() {
+        PeristanceSaver.writeObjectToFile(getBaseContext(), fileName);
+    }
+
+    private void restorePersistance() {
+        PeristanceSaver.readObjectFromFile(getBaseContext(), fileName);
+    }
+
+
 
     @Override
     public void detachFragment() {

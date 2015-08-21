@@ -1,5 +1,7 @@
 package se.parkourspots.controller;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -82,5 +84,18 @@ public class SpotHandler {
 
     public Map<Marker, Spot> getMap() {
         return map;
+    }
+
+    public Marker getMarker(Spot spot) {
+        //TODO
+        Iterator it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            if (entry.getValue().equals(spot)) {
+                Log.d("SPOT", "returning marker : " + entry.getKey());
+                return (Marker) entry.getKey();
+            }
+        }
+        return null;
     }
 }
