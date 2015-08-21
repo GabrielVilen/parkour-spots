@@ -51,8 +51,9 @@ public class SpotHandler {
 
     public void deleteSpot(Spot spot) {
         if (map.containsValue(spot)) {
-            map.remove(spot.getMarker());
-            spot.remove();
+            Marker marker = getMarker(spot);
+            map.remove(marker);
+            marker.remove();
         }
     }
 
@@ -97,5 +98,9 @@ public class SpotHandler {
             }
         }
         return null;
+    }
+
+    public void addSpot(Spot spot) {
+        // TODO
     }
 }

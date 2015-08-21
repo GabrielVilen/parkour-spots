@@ -65,7 +65,7 @@ public class SpotInfoActivity extends AppCompatActivity {
             goodFor.setText(spot.getGoodFor());
             size.setText(spot.getSize());
             groundMaterial.setText(spot.getMaterial());
-            photoView1.setImageBitmap(spot.getPhoto());
+            photoView1.setImageBitmap(spot.getBitmap());
         }
     }
 
@@ -100,7 +100,10 @@ public class SpotInfoActivity extends AppCompatActivity {
             spot.setDifficulty(difficulty.getText().toString());
             spot.setGoodFor(goodFor.getText().toString());
             spot.setMaterial(groundMaterial.getText().toString());
-            SpotInfoWindowAdapter.updateContent(spot.getMarker());
+            if (spotHandler == null) {
+                spotHandler = SpotHandler.getInstance();
+            }
+            SpotInfoWindowAdapter.updateContent(spotHandler.getMarker(spot));
         }
         NavUtils.navigateUpFromSameTask(this);
     }

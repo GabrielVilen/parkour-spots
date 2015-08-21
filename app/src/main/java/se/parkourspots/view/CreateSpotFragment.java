@@ -101,11 +101,11 @@ public class CreateSpotFragment extends Fragment {
         spot.setDifficulty(difficulty);
         spot.setGoodFor(goodFor);
         spot.setMaterial(material);
-        spot.setMarker(marker);
+        //spot.setMarker(marker);
         spot.setName(name);
         spot.setDescription(description);
         if (photo != null) {
-            spot.setPhoto(photo);
+            spot.setBitmap(photo);
             photo = null;
         }
 

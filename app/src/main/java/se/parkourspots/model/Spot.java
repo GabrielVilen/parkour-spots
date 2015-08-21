@@ -4,16 +4,18 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.maps.model.Marker;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * Created by Gabriel on 24/07/2015.
  */
-public class Spot implements Parcelable {
+public class Spot implements Parcelable, Serializable {
 
     private String name, description, goodFor, material, size, difficulty;
-    private Bitmap photo;
-    private Marker marker;
+    private SerialBitmap serialBitmap = new SerialBitmap(null);
 
     public Spot() {
     }
@@ -21,7 +23,6 @@ public class Spot implements Parcelable {
     public Spot(Parcel in) {
         readFromParcel(in);
     }
-
 
     @Override
     public int describeContents() {
@@ -37,12 +38,27 @@ public class Spot implements Parcelable {
         material = source.readString();
 
         try {
-            photo = Bitmap.CREATOR.createFromParcel(source);
+            serialBitmap.bitmap = Bitmap.CREATOR.createFromParcel(source);
         } catch (Exception e) {
             // Ignore. Exception thrown if no bitmap exist.
         }
     }
 
+    public void writeToFile(ObjectOutputStream outputStream) {
+        try {
+            serialBitmap.writeObject(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void restoreFromFile(ObjectInputStream ins) {
+        try {
+            serialBitmap.readObject(ins);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * We just need to write each field into the
      * parcel. When we read from parcel, they
@@ -60,8 +76,8 @@ public class Spot implements Parcelable {
         dest.writeString(size);
         dest.writeString(material);
 
-        if (photo != null) {
-            photo.writeToParcel(dest, 0);
+        if (serialBitmap.bitmap != null) {
+            serialBitmap.bitmap.writeToParcel(dest, 0);
         }
     }
 
@@ -100,10 +116,6 @@ public class Spot implements Parcelable {
         this.description = description;
     }
 
-    public Bitmap getPhoto() {
-        return photo;
-    }
-
     public String getGoodFor() {
         return goodFor;
     }
@@ -136,19 +148,11 @@ public class Spot implements Parcelable {
         this.difficulty = difficulty;
     }
 
-    public void setPhoto(Bitmap photo) {
-        this.photo = photo;
+    public void setBitmap(Bitmap bitmap) {
+        serialBitmap.bitmap = bitmap;
     }
 
-    public void setMarker(Marker marker) {
-        this.marker = marker;
-    }
-
-    public Marker getMarker() {
-        return marker;
-    }
-
-    public void remove() {
-        marker.remove();
+    public Bitmap getBitmap() {
+        return serialBitmap.bitmap;
     }
 }

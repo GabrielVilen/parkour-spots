@@ -59,9 +59,9 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
             if (spot.getName() != null) {
                 title.setText(spot.getName());
             }
-            if (spot.getPhoto() != null) {
+            if (spot.getBitmap() != null) {
                 icon.setBackground(null);
-                icon.setImageBitmap(spot.getPhoto());
+                icon.setImageBitmap(spot.getBitmap());
             }
         }
 

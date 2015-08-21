@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,26 +24,24 @@ public class PeristanceSaver {
      */
     public static void writeObjectToFile(Context context, String filename) {
         Log.d("SPOT", "writeObjectToFile()");
-        ObjectOutputStream objectOut = null;
+        ObjectOutputStream out = null;
         try {
             FileOutputStream fileOut = context.openFileOutput(filename, Activity.MODE_PRIVATE);
-            objectOut = new ObjectOutputStream(fileOut);
+            out = new ObjectOutputStream(fileOut);
 
             ArrayList<Spot> spots = SpotHandler.getInstance().getSpots();
             for (int i = 0; i < spots.size(); i++) {
-                Spot spot = spots.get(i);
-                LatLng latLng = SpotHandler.getInstance().getMarker(spot).getPosition();
-                objectOut.writeObject(spot); // TODO might be impossible due to marker not being serializable
-                objectOut.writeUTF(latLng.latitude + "," + latLng.latitude);
+                if (spots.get(i) != null) {
+                    spots.get(i).writeToFile(out);// TODO: nullpointerexception
+                }
             }
-
             fileOut.getFD().sync();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (objectOut != null) {
+            if (out != null) {
                 try {
-                    objectOut.close();
+                    out.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -61,21 +57,24 @@ public class PeristanceSaver {
      */
     public static Object readObjectFromFile(Context context, String filename) {
         Log.d("SPOT", "readingObjectFromFile()");
-        ObjectInputStream objectIn = null;
+        SpotHandler spotHandler = SpotHandler.getInstance();
+        ObjectInputStream ins = null;
         Object object = null;
         try {
-
             FileInputStream fileIn = context.getApplicationContext().openFileInput(filename);
-            objectIn = new ObjectInputStream(fileIn);
-            object = objectIn.readObject(); // TODO: java.io.EOFException
-
-        } catch (IOException | ClassNotFoundException e) {
-            Log.e("SPOT", e.getMessage());
-            e.printStackTrace();
+            ins = new ObjectInputStream(fileIn);
+            ArrayList<Spot> spots = SpotHandler.getInstance().getSpots();
+            for (int i = 0; i < spots.size(); i++) {
+                spots.get(i).restoreFromFile(ins); // TODO throws nullpointer? dvs försvinner instansen onPause?
+                spotHandler.addSpot(spots.get(i));
+                Log.d("SPOT", "bitmap: " + spots.get(i).getBitmap());
+            }
+        } catch (IOException e) {
+            Log.e("SPOT", "" + e.getMessage());
         } finally {
-            if (objectIn != null) {
+            if (ins != null) {
                 try {
-                    objectIn.close();
+                    ins.close();
                 } catch (IOException e) {
                     Log.e("SPOT", e.getMessage());
                     e.printStackTrace();
