@@ -24,14 +24,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
-
 import se.parkourspots.R;
 import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.controller.SpotInfoWindowAdapter;
-import se.parkourspots.util.FileSaver;
 import se.parkourspots.util.Keyboard;
-import se.parkourspots.util.PeristanceSaver;
+import se.parkourspots.util.SharedPreferencesSaver;
 
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, CreateSpotFragment.OnFragmentInteractionListener {
 
@@ -43,7 +40,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     private CreateSpotFragment fragment;
     private LatLng currentLoc;
     private boolean isVisible;
-    private String fileName = "test"; // TODO check if this works
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +64,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         setUpMapIfNeeded();
     }
 
-    private void getSavedMap() {
-        if (spotHandler != null) {
-            try {
-                PeristanceSaver.writeObjectToFile(getApplicationContext(), fileName);
-                //SpotHandler.getInstance().setMap(FileSaver.getMapFromFile());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
@@ -100,7 +85,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
                     .getMap();
             if (mMap != null) {
                 setUpMap();
-                restorePersistance();
+                restorePersistence();
                 // getSavedMap();
             }
         }
@@ -184,27 +169,22 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     protected void onPause() {
         super.onPause();
 
-        savePersistance();
-        //saveMapToFile();
+        savePersistence();
     }
 
-    private void saveMapToFile() {
-        try {
-            FileSaver.saveMapToFile(spotHandler.getMap(), getBaseContext());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void savePersistence() {
+        SharedPreferencesSaver.saveSharedPreferences(this);
     }
 
-    private void savePersistance() {
-        PeristanceSaver.writeObjectToFile(getBaseContext(), fileName);
+    private void restorePersistence() {
+        SharedPreferencesSaver.restoreSharedPreferences(this, mMap);
     }
 
-    private void restorePersistance() {
-        PeristanceSaver.readObjectFromFile(getBaseContext(), fileName);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SpotHandler.getInstance().getMap().clear();
     }
-
-
 
     @Override
     public void detachFragment() {
@@ -246,7 +226,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName())); // TODO: Sökaktiviteten startas ej
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
     }

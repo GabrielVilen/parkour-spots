@@ -19,7 +19,7 @@ import se.parkourspots.view.SpotInfoActivity;
  */
 public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, GoogleMap.OnInfoWindowClickListener {
 
-    private static SpotInfoWindowAdapter adapter;
+    private SpotInfoWindowAdapter adapter;
     private final Activity activity;
     private Spot spot;
     public final static String EXTRA_MESSAGE_SPOT_LATLNG = "se.parkourspots.view.SpotInfoWindowAdapter";
@@ -75,7 +75,7 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
         activity.startActivity(intent);
     }
 
-    public static void updateContent(Marker marker) {
+    public void updateContent(Marker marker) {
         adapter.getInfoContents(marker);
         marker.showInfoWindow();
     }

@@ -1,7 +1,5 @@
 package se.parkourspots.controller;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -18,7 +16,7 @@ import se.parkourspots.model.Spot;
 public class SpotHandler {
 
     private static SpotHandler instance;
-    private Map<Marker, Spot> map = new HashMap();
+    private Map<Marker, Spot> map = new HashMap<>();
 
     private SpotHandler() {
     }
@@ -29,14 +27,13 @@ public class SpotHandler {
         return instance;
     }
 
-    public void addMarker(Marker marker, Spot spot) {
+    public void addEntry(Marker marker, Spot spot) {
         map.put(marker, spot);
     }
 
     public Spot getSpot(LatLng latLng) throws NullPointerException {
-        Iterator it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry e = (Map.Entry) it.next();
+        for (Object o : map.entrySet()) {
+            Map.Entry e = (Map.Entry) o;
             Marker m = (Marker) e.getKey();
             if (m.getPosition().equals(latLng)) {
                 return getSpot(m);
@@ -52,6 +49,8 @@ public class SpotHandler {
     public void deleteSpot(Spot spot) {
         if (map.containsValue(spot)) {
             Marker marker = getMarker(spot);
+            Spot tmpSpot = map.get(marker);
+            tmpSpot = null; //TODO: nessecary?
             map.remove(marker);
             marker.remove();
         }
@@ -59,9 +58,8 @@ public class SpotHandler {
 
     public ArrayList<Spot> getSpots() {
         ArrayList<Spot> spots = new ArrayList<>();
-        Iterator it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            spots.add((Spot) ((Map.Entry) it.next()).getValue());
+        for (Object o : map.entrySet()) {
+            spots.add((Spot) ((Map.Entry) o).getValue());
         }
         return spots;
     }
@@ -88,19 +86,20 @@ public class SpotHandler {
     }
 
     public Marker getMarker(Spot spot) {
-        //TODO
-        Iterator it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Object o : map.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
             if (entry.getValue().equals(spot)) {
-                Log.d("SPOT", "returning marker : " + entry.getKey());
                 return (Marker) entry.getKey();
             }
         }
         return null;
     }
 
-    public void addSpot(Spot spot) {
-        // TODO
+    public ArrayList<Marker> getMarkers() {
+        ArrayList<Marker> markers = new ArrayList<>();
+        for (Object o : map.entrySet()) {
+            markers.add((Marker) ((Map.Entry) o).getKey());
+        }
+        return markers;
     }
 }

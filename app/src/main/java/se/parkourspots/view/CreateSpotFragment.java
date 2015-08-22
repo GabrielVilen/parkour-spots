@@ -65,7 +65,7 @@ public class CreateSpotFragment extends Fragment {
         CreateSpotFragment fragment = new CreateSpotFragment();
 
         Bundle args = new Bundle();
-        args.putParcelable(LAT_LNG, marker.getPosition());
+//        args.putParcelable(LAT_LNG, marker.getPosition());
         fragment.setArguments(args);
 
         return fragment;
@@ -109,7 +109,7 @@ public class CreateSpotFragment extends Fragment {
             photo = null;
         }
 
-        spotHandler.addMarker(marker, spot);
+        spotHandler.addEntry(marker, spot);
 
         mListener.detachFragment();
     }

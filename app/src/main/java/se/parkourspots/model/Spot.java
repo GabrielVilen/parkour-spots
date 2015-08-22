@@ -1,12 +1,14 @@
 package se.parkourspots.model;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Base64;
+import android.util.Log;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 /**
@@ -15,7 +17,7 @@ import java.io.Serializable;
 public class Spot implements Parcelable, Serializable {
 
     private String name, description, goodFor, material, size, difficulty;
-    private SerialBitmap serialBitmap = new SerialBitmap(null);
+    private Bitmap bitmap;
 
     public Spot() {
     }
@@ -38,27 +40,12 @@ public class Spot implements Parcelable, Serializable {
         material = source.readString();
 
         try {
-            serialBitmap.bitmap = Bitmap.CREATOR.createFromParcel(source);
+            bitmap = Bitmap.CREATOR.createFromParcel(source);
         } catch (Exception e) {
             // Ignore. Exception thrown if no bitmap exist.
         }
     }
 
-    public void writeToFile(ObjectOutputStream outputStream) {
-        try {
-            serialBitmap.writeObject(outputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void restoreFromFile(ObjectInputStream ins) {
-        try {
-            serialBitmap.readObject(ins);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
     /**
      * We just need to write each field into the
      * parcel. When we read from parcel, they
@@ -76,15 +63,15 @@ public class Spot implements Parcelable, Serializable {
         dest.writeString(size);
         dest.writeString(material);
 
-        if (serialBitmap.bitmap != null) {
-            serialBitmap.bitmap.writeToParcel(dest, 0);
+        if (bitmap != null) {
+            bitmap.writeToParcel(dest, 0);
         }
     }
 
     /**
      * This field is needed for Android to be able to
      * create new objects, individually or as arrays.
-     * <p/>
+     * <p>
      * This also means that you can use use the default
      * constructor to create the object and use another
      * method to hyrdate it as necessary.
@@ -149,10 +136,59 @@ public class Spot implements Parcelable, Serializable {
     }
 
     public void setBitmap(Bitmap bitmap) {
-        serialBitmap.bitmap = bitmap;
+        this.bitmap = bitmap;
     }
 
     public Bitmap getBitmap() {
-        return serialBitmap.bitmap;
+        return bitmap;
+    }
+
+    public void saveSharedPreferences(SharedPreferences.Editor editor, int i) {
+        editor.putString("name" + i, name);
+        editor.putString("description" + i, description);
+        editor.putString("goodFor" + i, goodFor);
+        editor.putString("difficulty" + i, difficulty);
+        editor.putString("size" + i, size);
+        editor.putString("material" + i, material);
+
+        if (bitmap != null) {
+            saveBitmap(editor, i);
+        }
+
+        Log.d("SPOT", "i: " + i + " saving name: " + name);
+    }
+
+
+    public Spot restoreSavedPreferences(SharedPreferences preferences, int i) {
+        name = preferences.getString("name" + i, "");
+        description = preferences.getString("description" + i, "");
+        goodFor = preferences.getString("goodFor" + i, "");
+        difficulty = preferences.getString("difficulty" + i, "");
+        size = preferences.getString("size" + i, "");
+        material = preferences.getString("material" + i, "");
+
+        Log.d("SPOT", "i: " + i + " restoring name: " + name);
+
+        return this;
+    }
+
+    public void saveBitmap(SharedPreferences.Editor editor, int i) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        getBitmap().compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        editor.putString("bitmap" + i, encodedImage);
+    }
+
+    public void restoreBitmap(SharedPreferences preferences, int i) {
+        String encodedBitmap = preferences.getString("bitmap" + i, "");
+
+        if (!encodedBitmap.equalsIgnoreCase("")) {
+            byte[] b = Base64.decode(encodedBitmap, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+            this.bitmap = bitmap;
+            Log.d("SPOT", "bitmap : " + bitmap);
+        }
     }
 }

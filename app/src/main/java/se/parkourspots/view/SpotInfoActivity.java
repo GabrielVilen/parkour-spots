@@ -34,6 +34,7 @@ public class SpotInfoActivity extends AppCompatActivity {
     private Spot spot;
     private boolean isEdited;
     private SpotHandler spotHandler;
+    private SpotInfoWindowAdapter adapter;
 
 
     @Override
@@ -103,7 +104,8 @@ public class SpotInfoActivity extends AppCompatActivity {
             if (spotHandler == null) {
                 spotHandler = SpotHandler.getInstance();
             }
-            SpotInfoWindowAdapter.updateContent(spotHandler.getMarker(spot));
+            adapter = new SpotInfoWindowAdapter(this);
+            adapter.updateContent(spotHandler.getMarker(spot));
         }
         NavUtils.navigateUpFromSameTask(this);
     }
