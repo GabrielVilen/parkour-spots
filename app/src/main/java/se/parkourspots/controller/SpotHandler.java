@@ -50,7 +50,7 @@ public class SpotHandler {
         if (map.containsValue(spot)) {
             Marker marker = getMarker(spot);
             Spot tmpSpot = map.get(marker);
-            tmpSpot = null; //TODO: nessecary?
+            tmpSpot = null;
             map.remove(marker);
             marker.remove();
         }

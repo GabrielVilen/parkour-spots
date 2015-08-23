@@ -3,7 +3,6 @@ package se.parkourspots.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -22,7 +21,6 @@ import se.parkourspots.model.Spot;
 public class SharedPreferencesSaver {
 
     public static void saveSharedPreferences(Activity activity) {
-        Log.d("SPOT", "saveSharedPreferences");
         SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
@@ -42,18 +40,14 @@ public class SharedPreferencesSaver {
         }
         editor.putInt("I", i);
 
-        Log.d("SPOT", "amount: " + i);
-
-        editor.apply();
+        editor.commit();
 
     }
 
     public static void restoreSharedPreferences(Activity activity, GoogleMap mMap) {
-        Log.d("SPOT", "restoreSharedPreferences");
         SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);
 
         SpotHandler spotHandler = SpotHandler.getInstance();
-        Map map = spotHandler.getMap();
         int i = preferences.getInt("I", 0);
         double longitude, latitude;
         LatLng latLng;
@@ -72,6 +66,5 @@ public class SharedPreferencesSaver {
                 spotHandler.addEntry(marker, spot);
             }
         }
-        Log.d("SPOT", "map size: " + map.size());
     }
 }

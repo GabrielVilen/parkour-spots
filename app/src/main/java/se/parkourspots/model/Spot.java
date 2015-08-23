@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Base64;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
@@ -71,7 +70,7 @@ public class Spot implements Parcelable, Serializable {
     /**
      * This field is needed for Android to be able to
      * create new objects, individually or as arrays.
-     * <p>
+     * <p/>
      * This also means that you can use use the default
      * constructor to create the object and use another
      * method to hyrdate it as necessary.
@@ -151,11 +150,7 @@ public class Spot implements Parcelable, Serializable {
         editor.putString("size" + i, size);
         editor.putString("material" + i, material);
 
-        if (bitmap != null) {
-            saveBitmap(editor, i);
-        }
-
-        Log.d("SPOT", "i: " + i + " saving name: " + name);
+        saveBitmap(editor, i);
     }
 
 
@@ -167,18 +162,19 @@ public class Spot implements Parcelable, Serializable {
         size = preferences.getString("size" + i, "");
         material = preferences.getString("material" + i, "");
 
-        Log.d("SPOT", "i: " + i + " restoring name: " + name);
-
         return this;
     }
 
     public void saveBitmap(SharedPreferences.Editor editor, int i) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        getBitmap().compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-
-        editor.putString("bitmap" + i, encodedImage);
+        if (bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] b = baos.toByteArray();
+            String encodedBitmap = Base64.encodeToString(b, Base64.DEFAULT);
+            editor.putString("bitmap" + i, encodedBitmap);
+        } else {
+            editor.putString("bitmap" + i, "");
+        }
     }
 
     public void restoreBitmap(SharedPreferences preferences, int i) {
@@ -186,9 +182,7 @@ public class Spot implements Parcelable, Serializable {
 
         if (!encodedBitmap.equalsIgnoreCase("")) {
             byte[] b = Base64.decode(encodedBitmap, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-            this.bitmap = bitmap;
-            Log.d("SPOT", "bitmap : " + bitmap);
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
         }
     }
 }

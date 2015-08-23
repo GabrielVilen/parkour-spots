@@ -17,9 +17,9 @@
 
         <EditText
             android:layout_width="wrap_content"
+            android:imeOptions="actionDone"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Spot title goes here"
             android:id="@+id/spotTitleInfoActivity"
             android:gravity="center"
             android:layout_alignParentTop="true"
@@ -31,7 +31,8 @@
             android:textStyle="bold"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:hint="Spot title" />
 
         <EditText
             android:id="@+id/goodForInfoActivity"
@@ -40,11 +41,13 @@
             android:layout_alignStart="@+id/difficultyInfoActivity"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:imeOptions="actionDone"
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:hint="good for" />
 
         <EditText
             android:id="@+id/EditText5"
@@ -66,13 +69,15 @@
             android:layout_alignBottom="@+id/EditText7"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:imeOptions="actionDone"
             android:layout_toEndOf="@+id/EditText7"
             android:layout_toRightOf="@+id/EditText7"
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:hint="difficulty" />
 
         <EditText
             android:id="@+id/EditText7"
@@ -91,10 +96,10 @@
 
         <EditText
             android:gravity="center"
+            android:imeOptions="actionDone"
             android:id="@+id/descriptionInfoActivity"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:text="Description goes here Description Description goes here goes here Description goes here"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_below="@+id/spotTitleInfoActivity"
             android:layout_alignParentLeft="true"
@@ -102,7 +107,8 @@
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:hint="Description" />
 
         <EditText
             android:id="@+id/EditText9"
@@ -124,13 +130,15 @@
             android:layout_alignBottom="@+id/EditText9"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:imeOptions="actionDone"
             android:layout_toEndOf="@+id/EditText9"
             android:layout_toRightOf="@+id/EditText9"
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:hint="material" />
 
         <EditText
             android:id="@+id/EditText11"
@@ -150,6 +158,7 @@
         <EditText
             android:id="@+id/sizeInfoActivity"
             android:layout_alignBottom="@+id/EditText11"
+            android:imeOptions="actionDone"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_toEndOf="@+id/EditText11"
@@ -158,7 +167,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:hint="size" />
 
         <ImageView
             android:id="@+id/photo1InfoActivity"
@@ -170,43 +180,5 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_camera_big" />
-
-        <!--<ImageView-->
-        <!--android:background="@drawable/ic_camera_big"-->
-        <!--android:id="@+id/photo2InfoActivity"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_below="@+id/photo1InfoActivity"-->
-        <!--android:layout_alignLeft="@+id/photo1InfoActivity"-->
-        <!--android:layout_alignStart="@+id/photo1InfoActivity" />-->
-
-        <!--<ImageView-->
-        <!--android:background="@drawable/ic_camera_big"-->
-        <!--android:id="@+id/photo3InfoActivity"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_below="@+id/photo2InfoActivity"-->
-        <!--android:layout_alignLeft="@+id/photo2InfoActivity"-->
-        <!--android:layout_alignStart="@+id/photo2InfoActivity" />-->
-
-
-        <!--<ImageView-->
-        <!--android:background="@drawable/ic_camera_big"-->
-        <!--android:id="@+id/photo4InfoActivity"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_below="@+id/photo3InfoActivity"-->
-        <!--android:layout_alignLeft="@+id/photo3InfoActivity"-->
-        <!--android:layout_alignStart="@+id/photo3InfoActivity" />-->
-
-        <!--<ImageView-->
-        <!--android:background="@drawable/ic_camera_big"-->
-        <!--android:id="@+id/photo5InfoActivity"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_below="@+id/photo4InfoActivity"-->
-        <!--android:layout_alignLeft="@+id/photo4InfoActivity"-->
-        <!--android:layout_alignStart="@+id/photo4InfoActivity" />-->
-
     </RelativeLayout>
 </ScrollView>

@@ -74,7 +74,7 @@ public class CreateSpotFragment extends Fragment {
     private void setUpHandler() {
         try {
             MapsActivity activity = (MapsActivity) getActivity();
-            spotHandler = activity.getSpotHandler();
+            spotHandler = activity.getHandler();
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

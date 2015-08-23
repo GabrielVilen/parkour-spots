@@ -63,7 +63,6 @@ public class SearchActivity extends ListActivity {
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        // TODO : Do something when a list item is clicked
         Intent intent = new Intent(this, SpotInfoActivity.class);
         String spotName = (String) listView.getItemAtPosition(position);
         intent.putExtra(EXTRA_MESSAGE_SPOT_NAME, spotName);

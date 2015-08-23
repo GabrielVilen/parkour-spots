@@ -1,6 +1,7 @@
 package se.parkourspots.view;
 
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,19 +34,20 @@ import se.parkourspots.util.SharedPreferencesSaver;
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, CreateSpotFragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private FragmentManager fragmentManager;
+    private FragmentManager manager;
     private Marker currentMarker;
-    private SpotHandler spotHandler;
-    private SpotInfoWindowAdapter windowAdapter;
+    private SpotHandler handler;
+    private SpotInfoWindowAdapter adapter;
     private CreateSpotFragment fragment;
     private LatLng currentLoc;
     private boolean isVisible;
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (spotHandler == null) {
-            spotHandler = SpotHandler.getInstance();
+        if (handler == null) {
+            handler = SpotHandler.getInstance();
         }
         setContentView(R.layout.activity_maps);
 
@@ -68,11 +70,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
      * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p>
+     * <p/>
      * If it isn't installed {@link SupportMapFragment} (and
      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
      * install/update the Google Play services APK on their device.
-     * <p>
+     * <p/>
      * A user can return to this FragmentActivity after following the prompt and correctly
      * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
      * have been completely destroyed during this process (it is likely that it would only be
@@ -86,13 +88,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
             if (mMap != null) {
                 setUpMap();
                 restorePersistence();
-                // getSavedMap();
             }
         }
     }
 
     /**
-     * <p>
+     * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
@@ -100,11 +101,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
 
-        windowAdapter = new SpotInfoWindowAdapter(this);
-        mMap.setInfoWindowAdapter(windowAdapter);
-        mMap.setOnInfoWindowClickListener(windowAdapter);
+        adapter = new SpotInfoWindowAdapter(this);
+        mMap.setInfoWindowAdapter(adapter);
+        mMap.setOnInfoWindowClickListener(adapter);
 
-        fragmentManager = getFragmentManager();
+        manager = getFragmentManager();
         final GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
@@ -156,10 +157,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
             currentMarker.setDraggable(true);
         }
         if (fragment == null) {
-            fragmentManager.beginTransaction().add(R.id.mapLayout, CreateSpotFragment.newInstance(currentMarker)).commit();
-            fragment = (CreateSpotFragment) fragmentManager.findFragmentById(R.id.createSpotFragment);
+            transaction = manager.beginTransaction();
+            transaction.show(CreateSpotFragment.newInstance(currentMarker));
+            transaction.add(R.id.mapLayout, CreateSpotFragment.newInstance(currentMarker)).commit();
+            fragment = (CreateSpotFragment) manager.findFragmentById(R.id.createSpotFragment);
         } else {
-            fragmentManager.beginTransaction().attach(fragment).commit();
+            manager.beginTransaction().attach(fragment).commit();
         }
 
         setMapWeight(2);
@@ -168,9 +171,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     @Override
     protected void onPause() {
         super.onPause();
-
         savePersistence();
     }
+
 
     private void savePersistence() {
         SharedPreferencesSaver.saveSharedPreferences(this);
@@ -191,7 +194,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         Keyboard.hideKeyboard(this);
         isVisible = false;
         fragment.clearFields();
-        fragmentManager.beginTransaction().detach(fragment).commit();
+        manager.beginTransaction().detach(fragment).commit();
 
         setMapWeight(0);
     }
@@ -210,8 +213,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         }
     }
 
-    public SpotHandler getSpotHandler() {
-        return spotHandler;
+    public SpotHandler getHandler() {
+        return handler;
     }
 
     @Override

@@ -2,6 +2,7 @@ package se.parkourspots.view;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -26,13 +27,11 @@ import se.parkourspots.util.Keyboard;
 
 public class SpotInfoActivity extends AppCompatActivity {
 
-    public static final String EXTRA_MESSAGE_SPOT = "EXTRA_MESSAGE_SPOT";
     private EditText spotTitle, description, difficulty, size, groundMaterial, goodFor;
     private ArrayList<EditText> textViews = new ArrayList<>();
     private ImageView photoView1;
-    private boolean inEditMode;
+    private boolean inEditMode, isEdited;
     private Spot spot;
-    private boolean isEdited;
     private SpotHandler spotHandler;
     private SpotInfoWindowAdapter adapter;
 
@@ -52,6 +51,8 @@ public class SpotInfoActivity extends AppCompatActivity {
         photoView1 = (ImageView) findViewById(R.id.photo1InfoActivity);
 
         spotHandler = SpotHandler.getInstance();
+        adapter = new SpotInfoWindowAdapter(this);
+
         Intent intent = getIntent();
         if (intent.hasExtra(SpotInfoWindowAdapter.EXTRA_MESSAGE_SPOT_LATLNG)) {
             spot = spotHandler.getSpot((LatLng) intent.getParcelableExtra(SpotInfoWindowAdapter.EXTRA_MESSAGE_SPOT_LATLNG));
@@ -66,7 +67,9 @@ public class SpotInfoActivity extends AppCompatActivity {
             goodFor.setText(spot.getGoodFor());
             size.setText(spot.getSize());
             groundMaterial.setText(spot.getMaterial());
-            photoView1.setImageBitmap(spot.getBitmap());
+            if (spot.getBitmap() != null) {
+                photoView1.setImageBitmap(spot.getBitmap());
+            }
         }
     }
 
@@ -104,12 +107,10 @@ public class SpotInfoActivity extends AppCompatActivity {
             if (spotHandler == null) {
                 spotHandler = SpotHandler.getInstance();
             }
-            adapter = new SpotInfoWindowAdapter(this);
             adapter.updateContent(spotHandler.getMarker(spot));
         }
         NavUtils.navigateUpFromSameTask(this);
     }
-
 
     public void editSpotInfo() {
         boolean isFocusable;
@@ -134,6 +135,11 @@ public class SpotInfoActivity extends AppCompatActivity {
             text.setFocusable(isFocusable);
             text.setFocusableInTouchMode(isFocusable);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     public void deleteSpotInfo() {

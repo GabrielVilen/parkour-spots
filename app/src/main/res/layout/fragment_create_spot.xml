@@ -28,6 +28,7 @@
 
         <EditText
             android:id="@+id/spotName"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:hint="Spot name"
@@ -37,6 +38,7 @@
 
         <EditText
             android:id="@+id/description"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:hint="Description"
@@ -45,6 +47,7 @@
 
         <EditText
             android:id="@+id/difficulty"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:hint="Difficulty"
@@ -61,6 +64,7 @@
 
         <EditText
             android:id="@+id/goodFor"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:hint="Good for"
@@ -69,6 +73,7 @@
 
         <EditText
             android:id="@+id/size"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:hint="Size"
