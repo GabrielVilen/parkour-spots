@@ -6,9 +6,14 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 /**
- * Created by Gabriel on 11/08/2015.
+ * A simple class for hiding the keyboard.
  */
 public class Keyboard {
+    /**
+     * Static method for hiding the keyboard opened in the given activity.
+     *
+     * @param activity The activity.
+     */
     public static void hideKeyboard(Activity activity) {
         View view = activity.getCurrentFocus();
         if (view != null) {

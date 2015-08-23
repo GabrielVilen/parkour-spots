@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -30,6 +31,9 @@ import se.parkourspots.controller.SpotInfoWindowAdapter;
 import se.parkourspots.util.Keyboard;
 import se.parkourspots.util.SharedPreferencesSaver;
 
+/**
+ * The main Activity containing the map and main entry point for the application.
+ */
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, CreateSpotFragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -84,13 +88,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
                     .getMap();
             if (mMap != null) {
                 setUpMap();
-                restorePersistence();
+                SharedPreferencesSaver.restoreSharedPreferences(this, mMap);
             }
         }
     }
 
     /**
-     * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
@@ -116,6 +119,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         checkGPS();
     }
 
+    /**
+     * Checks for the GPS signal. If GPS is disabled the user will be notified.
+     */
     private void checkGPS() {
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -136,7 +142,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         }
     }
 
-    public void toggleNewSpot() {
+    /**
+     * Called when the add button in the map is pressed.
+     * If the <Code>CreateSpotFragment</Code> is visible it will be detached, else it will be attached.
+     *
+     * @param view The view which is pressed.
+     */
+    public void clickAddButton(View view) {
         if (isVisible) {
             currentMarker.remove();
             currentMarker = null;
@@ -146,6 +158,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         }
     }
 
+    /**
+     * Attaches the <Code>CreateSpotFragment</Code>  to the map.
+     */
     private void attachFragment() {
         isVisible = true;
         if (currentLoc != null) {
@@ -164,19 +179,21 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         setMapWeight(2);
     }
 
+    /**
+     * Sets the layout weight of the map to the given weight.
+     * The layout weight specifies how much of the map that should be visible in the activity.
+     *
+     * @param weight The weight to set the map to.
+     */
+    private void setMapWeight(int weight) {
+        LinearLayout layout = (LinearLayout) findViewById(R.id.mapLayout);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, weight));
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        savePersistence();
-    }
-
-
-    private void savePersistence() {
         SharedPreferencesSaver.saveSharedPreferences(this);
-    }
-
-    private void restorePersistence() {
-        SharedPreferencesSaver.restoreSharedPreferences(this, mMap);
     }
 
     @Override
@@ -193,12 +210,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         manager.beginTransaction().detach(fragment).commit();
 
         setMapWeight(0);
-    }
-
-
-    private void setMapWeight(int weight) {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.mapLayout);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, weight));
     }
 
     @Override

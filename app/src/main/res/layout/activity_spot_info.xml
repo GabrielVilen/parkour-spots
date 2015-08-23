@@ -31,7 +31,8 @@
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false"
-            android:hint="Spot title" />
+            android:hint="Spot title"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/goodForInfoActivity"
@@ -46,7 +47,9 @@
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false"
-            android:hint="good for" />
+            android:hint="good for"
+            android:singleLine="true"
+            android:maxLength="1" />
 
         <EditText
             android:id="@+id/EditText5"
@@ -61,7 +64,8 @@
             android:textSize="20sp"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/difficultyInfoActivity"
@@ -74,9 +78,12 @@
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
-            android:inputType="number"
+            android:inputType="numberSigned"
             android:focusable="false"
-            android:hint="difficulty" />
+            android:hint="difficulty"
+            android:singleLine="true"
+            android:digits="1"
+            android:maxLength="1" />
 
         <EditText
             android:id="@+id/EditText7"
@@ -91,7 +98,8 @@
             android:textSize="20sp"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:singleLine="true" />
 
         <EditText
             android:gravity="center"
@@ -122,7 +130,8 @@
             android:textSize="20sp"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/groundMaterialInfoActivity"
@@ -137,7 +146,8 @@
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false"
-            android:hint="material" />
+            android:hint="material"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/EditText11"
@@ -152,7 +162,8 @@
             android:textSize="20sp"
             android:background="@android:color/transparent"
             android:inputType="none"
-            android:focusable="false" />
+            android:focusable="false"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/sizeInfoActivity"
@@ -165,9 +176,11 @@
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
-            android:inputType="number"
+            android:inputType="numberSigned"
             android:focusable="false"
-            android:hint="size" />
+            android:hint="size"
+            android:singleLine="true"
+            android:maxLength="1" />
 
         <ImageView
             android:id="@+id/photo1InfoActivity"

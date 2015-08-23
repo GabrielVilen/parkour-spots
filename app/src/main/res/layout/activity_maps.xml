@@ -50,7 +50,7 @@
         android:layout_margin="16dp"
         android:clickable="true"
         android:src="@drawable/ic_plus_white_big"
-        android:onClick="toggleNewSpot"
+        android:onClick="clickAddButton"
         app:layout_anchor="@id/mapLayout"
         app:layout_anchorGravity="bottom|right|end"
         app:borderWidth="0dp"

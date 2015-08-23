@@ -17,7 +17,6 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
@@ -38,8 +37,7 @@ import se.parkourspots.util.Keyboard;
  */
 public class CreateSpotFragment extends Fragment {
 
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100, RESULT_CANCELED = 0, RESULT_OK = -1;
-    private static final String LAT_LNG = "latLng";
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100, RESULT_OK = -1;
 
     private SpotHandler spotHandler;
     private OnFragmentInteractionListener mListener;
@@ -55,18 +53,20 @@ public class CreateSpotFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment .
+     * @return A new instance of fragment.
      */
     public static CreateSpotFragment newInstance() {
         CreateSpotFragment fragment = new CreateSpotFragment();
 
         Bundle args = new Bundle();
-//        args.putParcelable(LAT_LNG, marker.getPosition());
         fragment.setArguments(args);
 
         return fragment;
     }
 
+    /**
+     * Sets up the handler, which contains the mapping between the markers and spots.
+     */
     private void setUpHandler() {
         try {
             MapsActivity activity = (MapsActivity) getActivity();
@@ -79,6 +79,10 @@ public class CreateSpotFragment extends Fragment {
     public CreateSpotFragment() {
     }
 
+    /**
+     * Called when a new spot should be added.
+     * Creates a new spot instance with the data entered in the fields.
+     */
     private void addNewSpot() {
         String name = spotName.getText().toString();
         String description = this.description.getText().toString();
@@ -97,7 +101,6 @@ public class CreateSpotFragment extends Fragment {
         spot.setDifficulty(difficulty);
         spot.setGoodFor(goodFor);
         spot.setMaterial(material);
-        //spot.setMarker(marker);
         spot.setName(name);
         spot.setDescription(description);
         if (photo != null) {
@@ -108,14 +111,6 @@ public class CreateSpotFragment extends Fragment {
         spotHandler.addEntry(marker, spot);
 
         mListener.detachFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            LatLng latLng = getArguments().getParcelable(LAT_LNG);
-        }
     }
 
     @Override
@@ -152,6 +147,9 @@ public class CreateSpotFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Starts the camera activity. Called when the user presses the camera button.
+     */
     private void takePhoto() {
         Toast.makeText(getActivity(), "Starting camera", Toast.LENGTH_SHORT).show();
         Keyboard.hideKeyboard(getActivity());
@@ -169,6 +167,9 @@ public class CreateSpotFragment extends Fragment {
         }
     }
 
+    /**
+     * Clear (resets) the fields and focus in this spot fragment.
+     */
     void clearFields() {
         for (int i = 0; i < textViews.size(); i++) {
             textViews.get(i).setText("");
@@ -200,10 +201,6 @@ public class CreateSpotFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
         void detachFragment();

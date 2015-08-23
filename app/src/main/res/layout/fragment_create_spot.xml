@@ -52,7 +52,9 @@
             android:hint="Difficulty"
             android:inputType="number"
             android:singleLine="true"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:maxLength="1"
+            android:lines="1" />
 
         <EditText
             android:id="@+id/ground"
@@ -79,7 +81,9 @@
             android:hint="Size"
             android:inputType="number"
             android:singleLine="true"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:maxLength="1"
+            android:lines="1" />
 
         <RelativeLayout
             android:layout_width="match_parent"

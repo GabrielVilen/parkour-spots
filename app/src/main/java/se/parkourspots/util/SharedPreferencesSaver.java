@@ -16,10 +16,15 @@ import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.model.Spot;
 
 /**
- * Created by Gabriel on 22/08/2015.
+ * Class which contains methods for saving and retrieving key-value data pairs by using <Code>SharedPreferences</Code>.
  */
 public class SharedPreferencesSaver {
 
+    /**
+     * Saves the data in the application to a <Code>SharedPreferences</Code>.
+     *
+     * @param activity The activity to get the preferences from.
+     */
     public static void saveSharedPreferences(Activity activity) {
         SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -44,6 +49,12 @@ public class SharedPreferencesSaver {
 
     }
 
+    /**
+     * Restores the data in the application using a <Code>SharedPreferences</Code>.
+     *
+     * @param activity The activity to get the preferences from.
+     * @param mMap     The map to restore the data to.
+     */
     public static void restoreSharedPreferences(Activity activity, GoogleMap mMap) {
         SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);
 

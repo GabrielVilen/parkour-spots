@@ -16,9 +16,8 @@ import se.parkourspots.controller.SpotHandler;
 import se.parkourspots.model.Spot;
 
 /**
- * Created by Gabriel on 12/08/2015.
+ * The activity stared when a user searches for a spot.
  */
-
 public class SearchActivity extends ListActivity {
 
     public static final String EXTRA_MESSAGE_SPOT_NAME = "se.parkourspots.view.SearchActivity";
@@ -38,6 +37,11 @@ public class SearchActivity extends ListActivity {
         handleIntent(intent);
     }
 
+    /**
+     * Handles the intent and calls the search method.
+     *
+     * @param intent The intent to handle
+     */
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY).toLowerCase();
@@ -46,6 +50,11 @@ public class SearchActivity extends ListActivity {
         }
     }
 
+    /**
+     * Called when a user should search for a spot with the given string query.
+     *
+     * @param query The string to search spot name for.
+     */
     private void search(String query) {
         ArrayList<Spot> spots = SpotHandler.getInstance().getSpots();
         ArrayList<String> spotNames = new ArrayList<>();

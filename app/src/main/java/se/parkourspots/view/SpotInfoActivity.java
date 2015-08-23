@@ -24,13 +24,13 @@ import se.parkourspots.controller.SpotInfoWindowAdapter;
 import se.parkourspots.model.Spot;
 import se.parkourspots.util.Keyboard;
 
+/**
+ * This class represent the info activity which is displayed when a user clicks a marker.
+ * The class contains information about the spot.
+ */
 public class SpotInfoActivity extends AppCompatActivity {
 
-    private EditText spotTitle;
-    private EditText description;
-    private EditText difficulty;
-    private EditText groundMaterial;
-    private EditText goodFor;
+    private EditText spotTitle, description, difficulty, groundMaterial, goodFor, size;
     private final ArrayList<EditText> textViews = new ArrayList<>();
     private boolean inEditMode, isEdited;
     private Spot spot;
@@ -49,7 +49,6 @@ public class SpotInfoActivity extends AppCompatActivity {
         textViews.add(difficulty = (EditText) findViewById(R.id.difficultyInfoActivity));
         textViews.add(spotTitle = (EditText) findViewById(R.id.spotTitleInfoActivity));
         textViews.add(goodFor = (EditText) findViewById(R.id.goodForInfoActivity));
-        EditText size;
         textViews.add(size = (EditText) findViewById(R.id.sizeInfoActivity));
         ImageView photoView1 = (ImageView) findViewById(R.id.photo1InfoActivity);
 
@@ -99,22 +98,10 @@ public class SpotInfoActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        if (isEdited) {
-            spot.setName(spotTitle.getText().toString());
-            spot.setDescription(description.getText().toString());
-            spot.setDifficulty(difficulty.getText().toString());
-            spot.setGoodFor(goodFor.getText().toString());
-            spot.setMaterial(groundMaterial.getText().toString());
-            if (spotHandler == null) {
-                spotHandler = SpotHandler.getInstance();
-            }
-            adapter.updateContent(spotHandler.getMarker(spot));
-        }
-        NavUtils.navigateUpFromSameTask(this);
-    }
-
+    /**
+     * Called when the user clicks the edit button in the actionbar in this activity.
+     * Makes the fields editable in this activity.
+     */
     private void editSpotInfo() {
         boolean isFocusable;
         int color, inputType;
@@ -140,6 +127,10 @@ public class SpotInfoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when the user clicks the delete button in the actionbar in this activity.
+     * Alerts the user if the spot should be deleted, and if so deletes it.
+     */
     private void deleteSpotInfo() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage("Are you sure you want to delete this spot?").setCancelable(false)
@@ -157,5 +148,22 @@ public class SpotInfoActivity extends AppCompatActivity {
                 });
         alert.create().show();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (isEdited) {
+            spot.setName(spotTitle.getText().toString());
+            spot.setDescription(description.getText().toString());
+            spot.setDifficulty(difficulty.getText().toString());
+            spot.setGoodFor(goodFor.getText().toString());
+            spot.setMaterial(groundMaterial.getText().toString());
+            if (spotHandler == null) {
+                spotHandler = SpotHandler.getInstance();
+            }
+            adapter.updateContent(spotHandler.getMarker(spot));
+        }
+        NavUtils.navigateUpFromSameTask(this);
+    }
+
 
 }

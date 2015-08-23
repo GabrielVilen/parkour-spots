@@ -15,7 +15,7 @@ import se.parkourspots.view.SpotInfoActivity;
 
 
 /**
- * Created by Gabriel on 28/07/2015.
+ * Class containing the adapter between the spots and their info windows.
  */
 public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, GoogleMap.OnInfoWindowClickListener {
 
@@ -67,6 +67,11 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
         return view;
     }
 
+    /**
+     * Called when the info window is pressed on the given marker.
+     *
+     * @param marker The marker that is pressed.
+     */
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent intent = new Intent(activity, SpotInfoActivity.class);
@@ -74,6 +79,11 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
         activity.startActivity(intent);
     }
 
+    /**
+     * Called when the info window for the given marker should be updated with new values.
+     *
+     * @param marker The marker which info window should be updated.
+     */
     public void updateContent(Marker marker) {
         adapter.getInfoContents(marker);
         marker.showInfoWindow();

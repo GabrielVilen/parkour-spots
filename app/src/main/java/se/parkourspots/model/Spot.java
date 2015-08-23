@@ -11,13 +11,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 /**
- * Created by Gabriel on 24/07/2015.
+ * Class representing a spot in the application.
+ * Contains information about the spot, such as its name, photo or difficulty.
  */
 public class Spot implements Parcelable, Serializable {
 
     private String name, description, goodFor, material, size, difficulty;
     private Bitmap bitmap;
 
+    /**
+     * Empty constructor required by the <Code>Parcelable.CREATOR</Code>.
+     */
     public Spot() {
     }
 
@@ -25,11 +29,102 @@ public class Spot implements Parcelable, Serializable {
         readFromParcel(in);
     }
 
+
+    /**
+     * This field is needed for Android to be able to
+     * create new objects, individually or as arrays.
+     */
+    public static final Parcelable.Creator CREATOR =
+            new Parcelable.Creator() {
+                public Spot createFromParcel(Parcel in) {
+                    return new Spot(in);
+                }
+
+                public Spot[] newArray(int size) {
+                    return new Spot[size];
+                }
+            };
+
+
+    /**
+     * Saves the data in this spot to the given editor.
+     *
+     * @param editor The editor to the data save to.
+     * @param i      An unique integer to identify the spot number.
+     */
+    public void saveSharedPreferences(SharedPreferences.Editor editor, int i) {
+        editor.putString("name" + i, name);
+        editor.putString("description" + i, description);
+        editor.putString("goodFor" + i, goodFor);
+        editor.putString("difficulty" + i, difficulty);
+        editor.putString("size" + i, size);
+        editor.putString("material" + i, material);
+
+        saveBitmap(editor, i);
+    }
+
+
+    /**
+     * Retrives the saved data in the given <Code>SharedPreferences</Code>.
+     *
+     * @param preferences The preferences with the containing the saved data.
+     * @param i           An unique integer specifying which data to retrieve.
+     * @return This spot.
+     */
+    public Spot restoreSavedPreferences(SharedPreferences preferences, int i) {
+        name = preferences.getString("name" + i, "");
+        description = preferences.getString("description" + i, "");
+        goodFor = preferences.getString("goodFor" + i, "");
+        difficulty = preferences.getString("difficulty" + i, "");
+        size = preferences.getString("size" + i, "");
+        material = preferences.getString("material" + i, "");
+
+        return this;
+    }
+
+    /**
+     * Encodes the bitmap to a byte array and stores it in the given editor.
+     *
+     * @param editor The editor to store the bitmap to.
+     * @param i      A unique integer to identify the correct spot when retrieving the data.
+     */
+    private void saveBitmap(SharedPreferences.Editor editor, int i) {
+        if (bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] b = baos.toByteArray();
+            String encodedBitmap = Base64.encodeToString(b, Base64.DEFAULT);
+            editor.putString("bitmap" + i, encodedBitmap);
+        } else {
+            editor.putString("bitmap" + i, "");
+        }
+    }
+
+    /**
+     * Restores the previously saved bitmap by decoding a given decoded bitmap string.
+     *
+     * @param preferences The <Code>SharedPreferences</Code> which contains the encoded bitmap.
+     * @param i           An unique integer specifying which bitmap to get.
+     */
+    public void restoreBitmap(SharedPreferences preferences, int i) {
+        String encodedBitmap = preferences.getString("bitmap" + i, "");
+
+        if (!encodedBitmap.equalsIgnoreCase("")) {
+            byte[] b = Base64.decode(encodedBitmap, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+        }
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Called when the previously stored data should be read from the parcel.
+     *
+     * @param source The parcel to read from.
+     */
     private void readFromParcel(Parcel source) {
         name = source.readString();
         description = source.readString();
@@ -45,14 +140,7 @@ public class Spot implements Parcelable, Serializable {
         }
     }
 
-    /**
-     * We just need to write each field into the
-     * parcel. When we read from parcel, they
-     * will come back in the same order
-     *
-     * @param
-     * @param flags
-     */
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
@@ -67,24 +155,6 @@ public class Spot implements Parcelable, Serializable {
         }
     }
 
-    /**
-     * This field is needed for Android to be able to
-     * create new objects, individually or as arrays.
-     * <p/>
-     * This also means that you can use use the default
-     * constructor to create the object and use another
-     * method to hyrdate it as necessary.
-     */
-    public static final Parcelable.Creator CREATOR =
-            new Parcelable.Creator() {
-                public Spot createFromParcel(Parcel in) {
-                    return new Spot(in);
-                }
-
-                public Spot[] newArray(int size) {
-                    return new Spot[size];
-                }
-            };
 
     public String getName() {
         return name;
@@ -142,47 +212,4 @@ public class Spot implements Parcelable, Serializable {
         return bitmap;
     }
 
-    public void saveSharedPreferences(SharedPreferences.Editor editor, int i) {
-        editor.putString("name" + i, name);
-        editor.putString("description" + i, description);
-        editor.putString("goodFor" + i, goodFor);
-        editor.putString("difficulty" + i, difficulty);
-        editor.putString("size" + i, size);
-        editor.putString("material" + i, material);
-
-        saveBitmap(editor, i);
-    }
-
-
-    public Spot restoreSavedPreferences(SharedPreferences preferences, int i) {
-        name = preferences.getString("name" + i, "");
-        description = preferences.getString("description" + i, "");
-        goodFor = preferences.getString("goodFor" + i, "");
-        difficulty = preferences.getString("difficulty" + i, "");
-        size = preferences.getString("size" + i, "");
-        material = preferences.getString("material" + i, "");
-
-        return this;
-    }
-
-    private void saveBitmap(SharedPreferences.Editor editor, int i) {
-        if (bitmap != null) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] b = baos.toByteArray();
-            String encodedBitmap = Base64.encodeToString(b, Base64.DEFAULT);
-            editor.putString("bitmap" + i, encodedBitmap);
-        } else {
-            editor.putString("bitmap" + i, "");
-        }
-    }
-
-    public void restoreBitmap(SharedPreferences preferences, int i) {
-        String encodedBitmap = preferences.getString("bitmap" + i, "");
-
-        if (!encodedBitmap.equalsIgnoreCase("")) {
-            byte[] b = Base64.decode(encodedBitmap, Base64.DEFAULT);
-            bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-        }
-    }
 }
