@@ -40,7 +40,7 @@ public class SharedPreferencesSaver {
         }
         editor.putInt("I", i);
 
-        editor.commit();
+        editor.apply();
 
     }
 

@@ -2,7 +2,6 @@ package se.parkourspots.view;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -27,9 +26,12 @@ import se.parkourspots.util.Keyboard;
 
 public class SpotInfoActivity extends AppCompatActivity {
 
-    private EditText spotTitle, description, difficulty, size, groundMaterial, goodFor;
-    private ArrayList<EditText> textViews = new ArrayList<>();
-    private ImageView photoView1;
+    private EditText spotTitle;
+    private EditText description;
+    private EditText difficulty;
+    private EditText groundMaterial;
+    private EditText goodFor;
+    private final ArrayList<EditText> textViews = new ArrayList<>();
     private boolean inEditMode, isEdited;
     private Spot spot;
     private SpotHandler spotHandler;
@@ -47,8 +49,9 @@ public class SpotInfoActivity extends AppCompatActivity {
         textViews.add(difficulty = (EditText) findViewById(R.id.difficultyInfoActivity));
         textViews.add(spotTitle = (EditText) findViewById(R.id.spotTitleInfoActivity));
         textViews.add(goodFor = (EditText) findViewById(R.id.goodForInfoActivity));
+        EditText size;
         textViews.add(size = (EditText) findViewById(R.id.sizeInfoActivity));
-        photoView1 = (ImageView) findViewById(R.id.photo1InfoActivity);
+        ImageView photoView1 = (ImageView) findViewById(R.id.photo1InfoActivity);
 
         spotHandler = SpotHandler.getInstance();
         adapter = new SpotInfoWindowAdapter(this);
@@ -112,7 +115,7 @@ public class SpotInfoActivity extends AppCompatActivity {
         NavUtils.navigateUpFromSameTask(this);
     }
 
-    public void editSpotInfo() {
+    private void editSpotInfo() {
         boolean isFocusable;
         int color, inputType;
 
@@ -137,12 +140,7 @@ public class SpotInfoActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-    public void deleteSpotInfo() {
+    private void deleteSpotInfo() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage("Are you sure you want to delete this spot?").setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

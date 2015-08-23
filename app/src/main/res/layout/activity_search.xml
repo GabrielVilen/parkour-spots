@@ -4,8 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context=".view.SearchActivity"
-    android:background="@color/light_blue_background">
+    tools:context=".view.SearchActivity">
 
 
     <TextView
@@ -18,7 +17,7 @@
         android:layout_margin="10dp"
         android:text="Search results for: "
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="italic" />
 
     <TextView
@@ -28,7 +27,6 @@
         android:layout_alignBottom="@+id/textView2"
         android:layout_toRightOf="@+id/textView2"
         android:text="Medium Text"
-        android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
@@ -40,9 +38,7 @@
         <ListView
             android:id="@android:id/list"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/textView2"
-            android:layout_centerHorizontal="true" />
+            android:layout_height="fill_parent" />
 
     </LinearLayout>
 

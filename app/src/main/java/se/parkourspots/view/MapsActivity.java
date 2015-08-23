@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -37,11 +36,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     private FragmentManager manager;
     private Marker currentMarker;
     private SpotHandler handler;
-    private SpotInfoWindowAdapter adapter;
     private CreateSpotFragment fragment;
     private LatLng currentLoc;
     private boolean isVisible;
-    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +98,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
 
-        adapter = new SpotInfoWindowAdapter(this);
+        SpotInfoWindowAdapter adapter = new SpotInfoWindowAdapter(this);
         mMap.setInfoWindowAdapter(adapter);
         mMap.setOnInfoWindowClickListener(adapter);
 
@@ -139,7 +136,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         }
     }
 
-    public void toggleNewSpot(View view) {
+    public void toggleNewSpot() {
         if (isVisible) {
             currentMarker.remove();
             currentMarker = null;
@@ -157,9 +154,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
             currentMarker.setDraggable(true);
         }
         if (fragment == null) {
-            transaction = manager.beginTransaction();
-            transaction.show(CreateSpotFragment.newInstance(currentMarker));
-            transaction.add(R.id.mapLayout, CreateSpotFragment.newInstance(currentMarker)).commit();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.add(R.id.mapLayout, CreateSpotFragment.newInstance()).commit();
             fragment = (CreateSpotFragment) manager.findFragmentById(R.id.createSpotFragment);
         } else {
             manager.beginTransaction().attach(fragment).commit();

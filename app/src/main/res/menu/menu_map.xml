@@ -7,8 +7,4 @@
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
-
-    <!-- <item-->
-    <!--android:id="@+id/action_settings"-->
-    <!--android:title="Settings" />-->
 </menu>

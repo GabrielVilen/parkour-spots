@@ -21,7 +21,7 @@ public class Spot implements Parcelable, Serializable {
     public Spot() {
     }
 
-    public Spot(Parcel in) {
+    private Spot(Parcel in) {
         readFromParcel(in);
     }
 
@@ -165,7 +165,7 @@ public class Spot implements Parcelable, Serializable {
         return this;
     }
 
-    public void saveBitmap(SharedPreferences.Editor editor, int i) {
+    private void saveBitmap(SharedPreferences.Editor editor, int i) {
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);

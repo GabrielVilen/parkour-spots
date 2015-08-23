@@ -43,25 +43,21 @@ public class CreateSpotFragment extends Fragment {
 
     private SpotHandler spotHandler;
     private OnFragmentInteractionListener mListener;
-    private LatLng latLng;
-    private Spot spot;
 
     private EditText spotName, description, difficulty, goodFor, groundMaterial, size;
     private ImageView photoView;
     private ImageButton cameraButton;
-    private Marker marker;
     private Bitmap photo;
-    private ArrayList<EditText> textViews = new ArrayList<>();
+    private final ArrayList<EditText> textViews = new ArrayList<>();
     private ScrollView scrollView;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param marker Parameter 1.
      * @return A new instance of fragment .
      */
-    public static CreateSpotFragment newInstance(Marker marker) {
+    public static CreateSpotFragment newInstance() {
         CreateSpotFragment fragment = new CreateSpotFragment();
 
         Bundle args = new Bundle();
@@ -83,7 +79,7 @@ public class CreateSpotFragment extends Fragment {
     public CreateSpotFragment() {
     }
 
-    public void addNewSpot() {
+    private void addNewSpot() {
         String name = spotName.getText().toString();
         String description = this.description.getText().toString();
         String size = this.size.getText().toString();
@@ -91,12 +87,12 @@ public class CreateSpotFragment extends Fragment {
         String material = groundMaterial.getText().toString();
         String goodFor = this.goodFor.getText().toString();
 
-        marker = mListener.getCurrentMarker();
+        Marker marker = mListener.getCurrentMarker();
         marker.setTitle(name);
         marker.setDraggable(false);
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
-        spot = new Spot();
+        Spot spot = new Spot();
         spot.setSize(size);
         spot.setDifficulty(difficulty);
         spot.setGoodFor(goodFor);
@@ -118,7 +114,7 @@ public class CreateSpotFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            latLng = getArguments().getParcelable(LAT_LNG);
+            LatLng latLng = getArguments().getParcelable(LAT_LNG);
         }
     }
 

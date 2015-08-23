@@ -7,11 +7,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="se.parkourspots.view.SpotInfoActivity"
-    android:background="@color/light_blue_background">
+    tools:context="se.parkourspots.view.SpotInfoActivity">
 
     <RelativeLayout
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical">
 
@@ -59,7 +58,7 @@
             android:layout_width="wrap_content"
             android:text="Good for:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false" />
@@ -75,7 +74,7 @@
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
-            android:inputType="none"
+            android:inputType="number"
             android:focusable="false"
             android:hint="difficulty" />
 
@@ -89,7 +88,7 @@
             android:layout_width="wrap_content"
             android:text="Difficulty:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false" />
@@ -120,7 +119,7 @@
             android:layout_width="wrap_content"
             android:text="Ground material: "
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false" />
@@ -150,7 +149,7 @@
             android:layout_width="wrap_content"
             android:text="Size:"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false" />
@@ -166,7 +165,7 @@
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
-            android:inputType="none"
+            android:inputType="number"
             android:focusable="false"
             android:hint="size" />
 

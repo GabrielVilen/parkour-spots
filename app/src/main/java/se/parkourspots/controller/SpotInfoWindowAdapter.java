@@ -19,9 +19,8 @@ import se.parkourspots.view.SpotInfoActivity;
  */
 public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, GoogleMap.OnInfoWindowClickListener {
 
-    private SpotInfoWindowAdapter adapter;
+    private final SpotInfoWindowAdapter adapter;
     private final Activity activity;
-    private Spot spot;
     public final static String EXTRA_MESSAGE_SPOT_LATLNG = "se.parkourspots.view.SpotInfoWindowAdapter";
 
     public SpotInfoWindowAdapter(Activity activity) {
@@ -54,7 +53,7 @@ public class SpotInfoWindowAdapter implements GoogleMap.InfoWindowAdapter, Googl
         TextView title = (TextView) view.findViewById(R.id.spotTitleInfoWindow);
 
         SpotHandler handler = SpotHandler.getInstance();
-        spot = handler.getSpot(marker);
+        Spot spot = handler.getSpot(marker);
         if (spot != null) {
             if (spot.getName() != null) {
                 title.setText(spot.getName());
