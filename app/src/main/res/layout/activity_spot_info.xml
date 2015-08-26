@@ -48,8 +48,7 @@
             android:inputType="none"
             android:focusable="false"
             android:hint="good for"
-            android:singleLine="true"
-            android:maxLength="1" />
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/EditText5"

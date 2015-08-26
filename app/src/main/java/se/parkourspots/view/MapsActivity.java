@@ -42,7 +42,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
     private SpotHandler handler;
     private CreateSpotFragment fragment;
     private LatLng currentLoc;
-    private boolean isVisible;
+    private boolean isVisible, isGPSEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,11 +130,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
             alert.setMessage("Your GPS is disabled\n Do you want to enable it?").setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            isGPSEnabled = true;
                             startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            isGPSEnabled = false;
                             dialog.cancel();
                         }
                     });
@@ -163,11 +165,15 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
      */
     private void attachFragment() {
         isVisible = true;
-        if (currentLoc != null) {
-            currentMarker = mMap.addMarker(new MarkerOptions().position(currentLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLoc));
-            currentMarker.setDraggable(true);
+        if (!isGPSEnabled) {
+            currentLoc = new LatLng(0, 0);
         }
+        currentMarker = mMap.addMarker(new MarkerOptions().position(currentLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        if (isGPSEnabled) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLoc));
+        }
+        currentMarker.setDraggable(true);
+
         if (fragment == null) {
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.add(R.id.mapLayout, CreateSpotFragment.newInstance()).commit();
@@ -177,6 +183,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         }
 
         setMapWeight(2);
+
     }
 
     /**
