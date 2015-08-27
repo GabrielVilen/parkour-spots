@@ -1,4 +1,4 @@
-package se.parkourspots.controller;
+package se.parkourspots.connector;
 
 import android.app.Activity;
 import android.content.Intent;

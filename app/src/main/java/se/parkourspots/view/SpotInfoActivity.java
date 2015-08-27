@@ -19,8 +19,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 import se.parkourspots.R;
-import se.parkourspots.controller.SpotHandler;
-import se.parkourspots.controller.SpotInfoWindowAdapter;
+import se.parkourspots.connector.SpotHandler;
+import se.parkourspots.connector.SpotInfoWindowAdapter;
 import se.parkourspots.model.Spot;
 import se.parkourspots.util.Keyboard;
 

@@ -1,4 +1,4 @@
-package se.parkourspots.controller;
+package se.parkourspots.connector;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;

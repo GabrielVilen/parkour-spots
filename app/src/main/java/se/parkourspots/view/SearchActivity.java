@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import se.parkourspots.R;
-import se.parkourspots.controller.SpotHandler;
+import se.parkourspots.connector.SpotHandler;
 import se.parkourspots.model.Spot;
 
 /**

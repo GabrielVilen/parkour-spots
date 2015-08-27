@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.Iterator;
 import java.util.Map;
 
-import se.parkourspots.controller.SpotHandler;
+import se.parkourspots.connector.SpotHandler;
 import se.parkourspots.model.Spot;
 
 /**
