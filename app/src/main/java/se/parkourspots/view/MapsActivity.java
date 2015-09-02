@@ -134,12 +134,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setMessage("Your GPS is disabled\n Do you want to enable it?").setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("SETTINGS", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                         }
                     })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }
@@ -171,8 +171,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         isVisible = true;
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (currentLoc == null && loc != null) {
+            if (loc != null) {
                 currentLoc = new LatLng(loc.getLatitude(), loc.getLongitude());
+            } else if (currentLoc == null) {
+                currentLoc = new LatLng(0, 0);
             }
         }
         currentMarker = mMap.addMarker(new MarkerOptions().position(currentLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
