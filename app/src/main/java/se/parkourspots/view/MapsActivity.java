@@ -108,11 +108,16 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
 
         fragmentManager = getFragmentManager();
         final GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+            boolean zoomed = false;
+
             @Override
             public void onMyLocationChange(Location location) {
                 currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 13.5f));
-                mMap.setOnMyLocationChangeListener(null);
+                if (!zoomed) {
+                    zoomed = true;
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 13.5f));
+                }
+                //mMap.setOnMyLocationChangeListener(null);
             }
         };
         mMap.setOnMyLocationChangeListener(myLocationChangeListener);
@@ -166,10 +171,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         isVisible = true;
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (loc != null) {
+            if (currentLoc == null && loc != null) {
                 currentLoc = new LatLng(loc.getLatitude(), loc.getLongitude());
-            } else {
-                currentLoc = new LatLng(0, 0);
             }
         }
         currentMarker = mMap.addMarker(new MarkerOptions().position(currentLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
