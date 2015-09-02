@@ -31,7 +31,7 @@
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false"
-            android:hint="Spot title"
+            android:hint="@string/spot_title"
             android:singleLine="true" />
 
         <EditText
@@ -47,7 +47,7 @@
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false"
-            android:hint="good for"
+            android:hint="@string/good_for"
             android:singleLine="true" />
 
         <EditText
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
-            android:text="Good for:"
+            android:text="@string/good_for_b"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="20sp"
             android:background="@android:color/transparent"
@@ -77,9 +77,9 @@
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
-            android:inputType="numberSigned"
+            android:inputType="number"
             android:focusable="false"
-            android:hint="difficulty"
+            android:hint="@string/difficulty"
             android:singleLine="true"
             android:digits="1"
             android:maxLength="1" />
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
-            android:text="Difficulty:"
+            android:text="@string/difficulty_b"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="20sp"
             android:background="@android:color/transparent"
@@ -114,7 +114,7 @@
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false"
-            android:hint="Description" />
+            android:hint="@string/description_b" />
 
         <EditText
             android:id="@+id/EditText9"
@@ -124,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
-            android:text="Ground material: "
+            android:text="@string/ground_material_b"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="20sp"
             android:background="@android:color/transparent"
@@ -145,7 +145,7 @@
             android:background="@android:color/transparent"
             android:inputType="none"
             android:focusable="false"
-            android:hint="material"
+            android:hint="@string/ground_material"
             android:singleLine="true" />
 
         <EditText
@@ -156,7 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
-            android:text="Size:"
+            android:text="@string/size_b"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="20sp"
             android:background="@android:color/transparent"
@@ -175,9 +175,9 @@
             android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@android:color/transparent"
-            android:inputType="numberSigned"
+            android:inputType="number"
             android:focusable="false"
-            android:hint="size"
+            android:hint="@string/size"
             android:singleLine="true"
             android:maxLength="1" />
 

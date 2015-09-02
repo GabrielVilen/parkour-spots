@@ -37,12 +37,13 @@ import se.parkourspots.util.SharedPreferencesSaver;
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, CreateSpotFragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private FragmentManager manager;
+    private FragmentManager fragmentManager;
     private Marker currentMarker;
     private SpotHandler handler;
     private CreateSpotFragment fragment;
     private LatLng currentLoc;
-    private boolean isVisible, isGPSEnabled;
+    private LocationManager locationManager;
+    private boolean isVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         mMap.setInfoWindowAdapter(adapter);
         mMap.setOnInfoWindowClickListener(adapter);
 
-        manager = getFragmentManager();
+        fragmentManager = getFragmentManager();
         final GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
@@ -123,20 +124,18 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
      * Checks for the GPS signal. If GPS is disabled the user will be notified.
      */
     private void checkGPS() {
-        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setMessage("Your GPS is disabled\n Do you want to enable it?").setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            isGPSEnabled = true;
                             startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            isGPSEnabled = false;
                             dialog.cancel();
                         }
                     });
@@ -165,23 +164,27 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
      */
     private void attachFragment() {
         isVisible = true;
-        if (!isGPSEnabled) {
-            currentLoc = new LatLng(0, 0);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (loc != null) {
+                currentLoc = new LatLng(loc.getLatitude(), loc.getLongitude());
+            } else {
+                currentLoc = new LatLng(0, 0);
+            }
         }
         currentMarker = mMap.addMarker(new MarkerOptions().position(currentLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        if (isGPSEnabled) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLoc));
-        }
         currentMarker.setDraggable(true);
 
-        if (fragment == null) {
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.add(R.id.mapLayout, CreateSpotFragment.newInstance()).commit();
-            fragment = (CreateSpotFragment) manager.findFragmentById(R.id.createSpotFragment);
-        } else {
-            manager.beginTransaction().attach(fragment).commit();
+        if ((currentMarker.getPosition().longitude != 0) && (currentMarker.getPosition().latitude != 0)) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLoc));
         }
-
+        if (fragment == null) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.mapLayout, CreateSpotFragment.newInstance()).commit();
+            fragment = (CreateSpotFragment) fragmentManager.findFragmentById(R.id.createSpotFragment);
+        } else {
+            fragmentManager.beginTransaction().attach(fragment).commit();
+        }
         setMapWeight(2);
 
     }
@@ -214,7 +217,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMapCl
         Keyboard.hideKeyboard(this);
         isVisible = false;
         fragment.clearFields();
-        manager.beginTransaction().detach(fragment).commit();
+        fragmentManager.beginTransaction().detach(fragment).commit();
 
         setMapWeight(0);
     }

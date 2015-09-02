@@ -17,7 +17,7 @@
             android:id="@+id/textView"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:text="New spot"
+            android:text="@string/new_spot"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:background="@color/wallet_holo_blue_light"
@@ -30,7 +30,7 @@
             android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:hint="Spot name"
+            android:hint="@string/spot_title"
             android:singleLine="true"
             android:maxLength="20"
             android:layout_weight="1" />
@@ -40,7 +40,7 @@
             android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:hint="Description"
+            android:hint="@string/description_b"
             android:singleLine="false"
             android:layout_weight="1" />
 
@@ -49,7 +49,7 @@
             android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:hint="Difficulty"
+            android:hint="@string/difficulty"
             android:inputType="number"
             android:singleLine="true"
             android:layout_weight="1"
@@ -60,7 +60,7 @@
             android:id="@+id/ground"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:hint="Ground material"
+            android:hint="@string/ground_material"
             android:singleLine="true"
             android:layout_weight="1" />
 
@@ -69,7 +69,7 @@
             android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:hint="Good for"
+            android:hint="@string/good_for"
             android:layout_weight="1"
             android:singleLine="true" />
 
@@ -78,7 +78,7 @@
             android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:hint="Size"
+            android:hint="@string/size"
             android:inputType="number"
             android:singleLine="true"
             android:layout_weight="1"
@@ -119,7 +119,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="#ff73ff00"
-                android:text="Save"
+                android:text="@string/save"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
